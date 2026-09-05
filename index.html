@@ -3,20 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>A surprise awaits you... ✨</title>
+  <title>A Celestial Surprise... ✨</title>
   
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@1,500;1,700&family=Sacramento&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@1,500;1,700&family=Sacramento&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
   <style>
-    :root {
-      --primary-pink: #ff3377;
-      --secondary-pink: #ff758c;
-      --glow-color: rgba(255, 51, 119, 0.4);
-      --glass-bg: rgba(255, 255, 255, 0.05);
-      --glass-border: rgba(255, 255, 255, 0.12);
-    }
-
     * {
       box-sizing: border-box;
       margin: 0;
@@ -27,7 +19,7 @@
     }
 
     body {
-      background: radial-gradient(circle at 50% 20%, #20061d 0%, #0c020d 60%, #050006 100%);
+      background: radial-gradient(circle at 50% 10%, #240b22 0%, #110314 50%, #060007 100%);
       color: #fff;
       min-height: 100vh;
       display: flex;
@@ -37,28 +29,33 @@
       perspective: 1200px;
     }
 
-    /* Ambient Bokeh Engine */
-    .bokeh-wrap {
+    #ambientSkyCanvas {
       position: fixed;
       inset: 0;
+      width: 100vw;
+      height: 100vh;
       pointer-events: none;
       z-index: 1;
-      overflow: hidden;
-    }
-    .bokeh-orb {
-      position: absolute;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(230, 60, 150, 0.45) 0%, rgba(138, 43, 226, 0) 70%);
-      filter: blur(14px);
-      animation: orbFloat ease-in-out infinite alternate;
-    }
-    @keyframes orbFloat {
-      from { transform: translateY(0) scale(0.9) rotate(0deg); opacity: 0.35; }
-      to { transform: translateY(-60px) scale(1.3) rotate(30deg); opacity: 0.8; }
     }
 
-    /* App Container */
-    .app-viewport {
+    .aurora-mesh {
+      position: fixed;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(255, 51, 153, 0.22) 0%, rgba(138, 43, 226, 0.18) 45%, transparent 70%);
+      filter: blur(80px);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 2;
+      animation: auroraMove 16s ease-in-out infinite alternate;
+    }
+    @keyframes auroraMove {
+      0% { transform: translate(-20%, -30%) scale(1); }
+      50% { transform: translate(25%, 20%) scale(1.2); }
+      100% { transform: translate(-10%, 30%) scale(0.95); }
+    }
+
+    .viewport {
       position: relative;
       z-index: 5;
       width: 100%;
@@ -69,7 +66,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 24px 18px;
+      padding: 20px 16px;
     }
 
     .screen {
@@ -81,38 +78,61 @@
       justify-content: center;
       text-align: center;
       opacity: 0;
-      transform: scale(0.94) translateY(10px);
-      transition: opacity 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+      transform: translateY(12px) scale(0.96);
+      transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .screen.active {
       display: flex;
       opacity: 1;
-      transform: scale(1) translateY(0);
+      transform: translateY(0) scale(1);
+    }
+
+    .floating-element {
+      animation: gentleFloat 5s ease-in-out infinite alternate;
+    }
+    @keyframes gentleFloat {
+      0% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-7px) rotate(0.5deg); }
+      100% { transform: translateY(5px) rotate(-0.5deg); }
+    }
+
+    /* Screen Mascot GIFs */
+    .screen-cat {
+      width: 70px;
+      height: 70px;
+      object-fit: contain;
+      filter: drop-shadow(0 6px 14px rgba(255, 105, 180, 0.4));
+      margin-bottom: 8px;
+      animation: catHop 2.6s ease-in-out infinite alternate;
+    }
+    @keyframes catHop {
+      0% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-7px) scale(1.06); }
+      100% { transform: translateY(0) scale(1); }
     }
 
     h1.title {
-      font-size: 25px;
+      font-size: 24px;
       font-weight: 700;
-      margin-bottom: 6px;
-      background: linear-gradient(135deg, #ffffff 40%, #ff8cb6 100%);
+      margin-bottom: 5px;
+      background: linear-gradient(135deg, #ffffff 30%, #ff94c2 70%, #ffd1dc 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       letter-spacing: -0.3px;
     }
     p.subtitle {
-      font-size: 13px;
-      color: #d8b2ce;
-      margin-bottom: 20px;
+      font-size: 12.5px;
+      color: #dfb8d8;
+      margin-bottom: 18px;
       font-weight: 300;
     }
 
-    /* Ultra-Glass Button */
-    .btn-pill {
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 105, 180, 0.15));
-      border: 1px solid rgba(255, 182, 193, 0.4);
-      backdrop-filter: blur(15px);
-      -webkit-backdrop-filter: blur(15px);
-      color: #ffe6f0;
+    .btn-liquid {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 80, 160, 0.2));
+      border: 1px solid rgba(255, 192, 203, 0.45);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      color: #ffe6f2;
       padding: 13px 32px;
       border-radius: 40px;
       font-size: 14.5px;
@@ -121,141 +141,144 @@
       display: inline-flex;
       align-items: center;
       gap: 10px;
-      margin-top: 18px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 0 12px rgba(255, 105, 180, 0.2);
+      margin-top: 15px;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.55), inset 0 0 15px rgba(255, 105, 180, 0.25);
       transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
-    .btn-pill:active { transform: scale(0.92); box-shadow: 0 5px 15px rgba(255, 51, 119, 0.5); }
+    .btn-liquid:active {
+      transform: scale(0.92);
+      box-shadow: 0 4px 15px rgba(255, 51, 119, 0.6);
+    }
 
-    /* Screen 1: 3D Isometric Gift Box */
-    .gift-3d-scene {
-      width: 200px;
-      height: 200px;
-      perspective: 800px;
-      margin: 30px 0;
+    /* Screen 1: 3D Floating Gift Box */
+    .gift-stage {
+      width: 220px;
+      height: 220px;
+      perspective: 900px;
+      margin: 10px 0 20px;
       cursor: pointer;
     }
-    .gift-cube {
-      width: 140px;
-      height: 130px;
-      margin: 40px auto 0;
+    .gift-3d-box {
+      width: 150px;
+      height: 140px;
+      margin: 45px auto 0;
       position: relative;
       transform-style: preserve-3d;
-      transform: rotateX(-16deg) rotateY(24deg);
-      transition: transform 0.6s ease;
+      transform: rotateX(-14deg) rotateY(22deg);
+      transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
-    .gift-3d-scene:hover .gift-cube {
-      transform: rotateX(-8deg) rotateY(12deg) scale(1.05);
+    .gift-stage:hover .gift-3d-box {
+      transform: rotateX(-6deg) rotateY(10deg) scale(1.08);
     }
-    .cube-body {
-      width: 140px;
-      height: 120px;
+    .gift-body {
+      width: 150px;
+      height: 125px;
       background: linear-gradient(135deg, #ff1a75, #a30046);
-      border-radius: 12px;
+      border-radius: 16px;
       position: relative;
-      box-shadow: 0 25px 50px rgba(255, 26, 117, 0.4);
+      box-shadow: 0 25px 50px rgba(255, 26, 117, 0.45);
     }
-    .cube-body::before {
+    .gift-body::before {
       content: '';
       position: absolute;
       inset: 0;
-      width: 28px;
+      width: 30px;
       margin: auto;
-      background: linear-gradient(to right, #ffd700, #ff9900);
-      box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+      background: linear-gradient(to right, #ffd700, #ffaa00);
+      box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
     }
-    .cube-body::after {
+    .gift-body::after {
       content: '';
       position: absolute;
       inset: 0;
-      height: 28px;
+      height: 30px;
       margin: auto;
-      background: linear-gradient(to bottom, #ffd700, #ff9900);
-      box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+      background: linear-gradient(to bottom, #ffd700, #ffaa00);
+      box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
     }
-    .cube-lid {
-      width: 154px;
-      height: 38px;
+    .gift-lid {
+      width: 164px;
+      height: 42px;
       background: linear-gradient(135deg, #ff3388, #b80052);
-      border-radius: 8px;
+      border-radius: 10px;
       position: absolute;
-      top: -15px;
+      top: -16px;
       left: -7px;
       z-index: 4;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
       transition: transform 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55), opacity 0.5s;
     }
-    .cube-lid::before {
+    .gift-lid::before {
       content: '';
       position: absolute;
       inset: 0;
-      width: 28px;
+      width: 30px;
       margin: auto;
-      background: linear-gradient(to right, #ffd700, #ff9900);
+      background: linear-gradient(to right, #ffd700, #ffaa00);
     }
-    .cube-bow {
+    .gift-ribbon-bow {
       position: absolute;
-      top: -24px;
+      top: -26px;
       left: 50%;
       transform: translateX(-50%);
-      font-size: 34px;
-      filter: drop-shadow(0 4px 10px rgba(255, 215, 0, 0.6));
+      font-size: 38px;
+      filter: drop-shadow(0 4px 12px rgba(255, 215, 0, 0.7));
     }
-    .gift-3d-scene.opened .cube-lid {
-      transform: translateY(-90px) rotateZ(-25deg) rotateX(30deg) scale(0.85);
+    .gift-stage.opened .gift-lid {
+      transform: translateY(-110px) rotateZ(-28deg) rotateX(35deg) scale(0.8);
       opacity: 0;
     }
 
     /* Screen 2: Glass Lock Screen */
     .clock-widget {
-      font-size: 54px;
+      font-size: 50px;
       font-weight: 700;
       letter-spacing: 2px;
-      text-shadow: 0 0 25px rgba(255, 255, 255, 0.35);
+      text-shadow: 0 0 30px rgba(255, 255, 255, 0.4);
       margin-bottom: 2px;
     }
-    .glass-keypad {
+    .keypad-glass {
       background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.14);
+      border: 1px solid rgba(255, 255, 255, 0.15);
       backdrop-filter: blur(28px);
       -webkit-backdrop-filter: blur(28px);
       border-radius: 34px;
-      padding: 24px 20px;
+      padding: 20px 18px;
       width: 100%;
       max-width: 320px;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), inset 0 0 15px rgba(255, 105, 180, 0.1);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.65), inset 0 0 15px rgba(255, 105, 180, 0.15);
     }
     .pin-dots {
       display: flex;
       justify-content: center;
       gap: 16px;
-      margin: 16px 0 20px;
+      margin: 12px 0 16px;
     }
     .pin-dot {
       width: 13px;
       height: 13px;
       border-radius: 50%;
       border: 2px solid #ff758c;
-      transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      transition: all 0.25s;
     }
     .pin-dot.filled {
       background: #ff3377;
       border-color: #ff3377;
-      box-shadow: 0 0 14px #ff3377;
-      transform: scale(1.15);
+      box-shadow: 0 0 16px #ff3377;
+      transform: scale(1.2);
     }
-    .key-grid {
+    .key-matrix {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
+      gap: 10px;
     }
-    .dial-key {
-      background: rgba(255, 255, 255, 0.07);
+    .dial-btn {
+      background: rgba(255, 255, 255, 0.08);
       border: 1px solid rgba(255, 255, 255, 0.12);
-      width: 65px;
-      height: 65px;
+      width: 62px;
+      height: 62px;
       border-radius: 50%;
-      font-size: 23px;
+      font-size: 22px;
       font-weight: 600;
       color: #fff;
       display: flex;
@@ -265,14 +288,14 @@
       cursor: pointer;
       transition: all 0.18s;
     }
-    .dial-key:active {
-      background: rgba(255, 51, 119, 0.4);
+    .dial-btn:active {
+      background: rgba(255, 51, 119, 0.45);
       border-color: #ff3377;
       transform: scale(0.88);
     }
 
-    /* Fixed Curtain Reveal Screen */
-    .curtain-view {
+    /* Fixed Velvet Curtains Screen */
+    .curtain-screen {
       position: fixed;
       inset: 0;
       width: 100vw;
@@ -281,72 +304,77 @@
       z-index: 99999;
       pointer-events: auto;
     }
-    .curtain-panel {
+    .curtain-wing {
       width: 50%;
       height: 100%;
       background: repeating-linear-gradient(90deg, #091a4a, #050e2b 25px, #0e2978 50px);
-      box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.9);
+      box-shadow: inset 0 0 60px rgba(0, 0, 0, 0.95);
       transition: transform 1.2s cubic-bezier(0.77, 0, 0.175, 1);
     }
-    .curtain-view.opened .curtain-left { transform: translateX(-100%); }
-    .curtain-view.opened .curtain-right { transform: translateX(100%); }
-    .curtain-center-btn {
+    .curtain-screen.opened .left-wing { transform: translateX(-100%); }
+    .curtain-screen.opened .right-wing { transform: translateX(100%); }
+    .curtain-trigger {
       position: absolute;
       top: 50%; left: 50%;
       transform: translate(-50%, -50%);
       z-index: 100000;
-      pointer-events: auto !important;
       cursor: pointer;
     }
 
-    /* Screen 5: Cake & Counter (DOB 2008) */
-    .stat-counter-grid {
+    /* Screen 5: Cake & Counter */
+    .counter-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 12px;
+      gap: 10px;
       width: 100%;
-      margin: 15px 0 10px;
+      margin: 10px 0;
     }
-    .stat-tile {
+    .counter-box {
       background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(12px);
       border-radius: 18px;
-      padding: 12px 6px;
+      padding: 10px 4px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
     }
-    .stat-tile h3 { font-size: 24px; color: #ff8cb6; font-weight: 700; }
-    .stat-tile span { font-size: 11px; color: #d6b4cc; letter-spacing: 0.5px; }
+    .counter-box h3 {
+      font-size: 22px;
+      color: #ff8cb6;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
+    .counter-box span { font-size: 10px; color: #d6b4cc; letter-spacing: 0.8px; }
 
-    .cake-art {
+    .cake-showcase {
       position: relative;
-      width: 230px;
-      height: 145px;
-      margin: 20px auto 10px;
+      width: 210px;
+      height: 135px;
+      margin: 12px auto 6px;
       cursor: pointer;
     }
     .cake-base {
       position: absolute;
       bottom: 0;
-      width: 230px;
-      height: 65px;
+      width: 210px;
+      height: 60px;
       background: linear-gradient(180deg, #ffd0e0, #f7a8c4);
-      border-radius: 16px 16px 24px 24px;
-      box-shadow: 0 12px 30px rgba(0,0,0,0.5);
+      border-radius: 16px 16px 22px 22px;
+      box-shadow: 0 14px 35px rgba(0,0,0,0.55);
     }
-    .cake-top-layer {
+    .cake-top {
       position: absolute;
-      bottom: 56px;
-      left: 28px;
-      width: 174px;
-      height: 55px;
+      bottom: 50px;
+      left: 25px;
+      width: 160px;
+      height: 50px;
       background: linear-gradient(180deg, #fff0f5, #ffd9e8);
-      border-radius: 14px 14px 0 0;
+      border-radius: 12px 12px 0 0;
     }
     .candle {
       position: absolute;
-      bottom: 110px;
-      width: 24px;
-      height: 40px;
+      bottom: 98px;
+      width: 22px;
+      height: 36px;
       background: #ffffff;
       border-radius: 8px;
       border: 2px solid #ffb6c1;
@@ -355,19 +383,19 @@
       justify-content: center;
       font-weight: 800;
       color: #ff3377;
-      font-size: 16px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      font-size: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     }
-    .candle-1 { left: 78px; }
-    .candle-2 { left: 128px; }
-    .candle-flame {
+    .candle-1 { left: 70px; }
+    .candle-2 { left: 118px; }
+    .flame {
       position: absolute;
-      top: -20px;
-      width: 14px;
-      height: 22px;
+      top: -18px;
+      width: 12px;
+      height: 20px;
       background: radial-gradient(circle at 50% 80%, #ff5500, #ffdd00, #ffffff);
       border-radius: 50% 50% 20% 20%;
-      box-shadow: 0 0 16px #ff9900, 0 0 30px #ff3300;
+      box-shadow: 0 0 16px #ff9900, 0 0 32px #ff3300;
       animation: flameMotion 0.35s infinite alternate ease-in-out;
     }
     @keyframes flameMotion {
@@ -375,52 +403,57 @@
       to { transform: scale(1.18) rotate(4deg); }
     }
 
-    /* Screen 6: Star Map 2008 */
-    .starmap-canvas {
-      width: 285px;
-      height: 285px;
-      border-radius: 50%;
-      background: radial-gradient(circle at center, #1b1036 0%, #080314 100%);
-      border: 2px solid rgba(255, 215, 0, 0.45);
-      box-shadow: 0 0 35px rgba(255, 105, 180, 0.25);
-      margin: 15px 0;
+    /* Screen 6: Star Map */
+    .starmap-stage {
+      position: relative;
+      width: 270px;
+      height: 270px;
+      margin: 8px 0;
     }
-
-    /* Screen 7: Polaroid Carousel */
-    .polaroid-frame {
-      background: #ffffff;
-      padding: 14px 14px 22px;
-      border-radius: 12px;
-      box-shadow: 0 25px 60px rgba(0,0,0,0.85);
-      width: 280px;
-      transform: rotate(-1.5deg);
-      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-    .polaroid-frame:hover { transform: rotate(0deg) scale(1.02); }
-    .polaroid-frame img {
+    #interactiveStarMap {
       width: 100%;
-      height: 265px;
-      object-fit: cover;
-      border-radius: 6px;
-    }
-    .polaroid-frame p {
-      font-family: 'Sacramento', cursive;
-      font-size: 25px;
-      color: #2b1122;
-      margin-top: 10px;
+      height: 100%;
+      border-radius: 50%;
+      background: radial-gradient(circle at center, #1b0f34 0%, #080213 100%);
+      border: 2px solid rgba(255, 215, 0, 0.45);
+      box-shadow: 0 0 40px rgba(255, 105, 180, 0.3);
     }
 
-    /* Screen 8: Reasons Flip Cards */
-    .reasons-grid {
+    /* Screen 7: Liquid Polaroid Memories */
+    .polaroid-liquid {
+      background: #ffffff;
+      padding: 12px 12px 18px;
+      border-radius: 14px;
+      box-shadow: 0 25px 65px rgba(0,0,0,0.9);
+      width: 270px;
+      transform: rotate(-1.5deg);
+      transition: all 0.4s ease;
+    }
+    .polaroid-liquid:hover { transform: rotate(0deg) scale(1.02); }
+    .polaroid-liquid img {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+    .polaroid-liquid p {
+      font-family: 'Sacramento', cursive;
+      font-size: 24px;
+      color: #260f1e;
+      margin-top: 8px;
+    }
+
+    /* Screen 8: Reasons 3D Flip Deck */
+    .reasons-container {
       display: grid;
-      grid-template-columns: repeat(2, 140px);
+      grid-template-columns: repeat(2, 135px);
       gap: 12px;
       perspective: 1000px;
-      margin: 16px 0;
+      margin: 12px 0;
     }
     .flip-card {
-      width: 140px;
-      height: 125px;
+      width: 135px;
+      height: 120px;
       position: relative;
       transform-style: preserve-3d;
       transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
@@ -438,27 +471,27 @@
       justify-content: center;
       padding: 10px;
       text-align: center;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.5);
     }
     .card-front {
-      background: linear-gradient(135deg, rgba(255, 105, 180, 0.2), rgba(255, 255, 255, 0.06));
-      border: 1px solid rgba(255, 182, 193, 0.35);
-      font-size: 14.5px;
+      background: linear-gradient(135deg, rgba(255, 105, 180, 0.22), rgba(255, 255, 255, 0.08));
+      border: 1px solid rgba(255, 182, 193, 0.4);
+      font-size: 13.5px;
       color: #ff9ec4;
       font-weight: 600;
     }
     .card-back {
       background: linear-gradient(135deg, #ff3377, #99003d);
       transform: rotateY(180deg);
-      font-size: 11.5px;
+      font-size: 11px;
       line-height: 1.45;
       color: #fff;
     }
 
-    /* Screen 9: Heartbeat Thumb Sync */
-    .touch-sync-pad {
-      width: 145px;
-      height: 145px;
+    /* Screen 9: Heartbeat Touch */
+    .touch-sync-orb {
+      width: 140px;
+      height: 140px;
       border-radius: 50%;
       background: rgba(255, 255, 255, 0.05);
       border: 2px dashed #ff4e79;
@@ -466,19 +499,19 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      margin: 25px 0 15px;
+      margin: 15px 0 10px;
       cursor: pointer;
       transition: all 0.3s;
     }
-    .touch-sync-pad.holding {
+    .touch-sync-orb.holding {
       border-style: solid;
-      background: rgba(255, 51, 119, 0.3);
-      box-shadow: 0 0 45px rgba(255, 51, 119, 0.85);
+      background: rgba(255, 51, 119, 0.35);
+      box-shadow: 0 0 50px rgba(255, 51, 119, 0.9);
     }
-    .touch-sync-pad.holding .touch-heart {
-      animation: beatHeart 0.6s infinite ease-in-out;
+    .touch-sync-orb.holding .heart-icon {
+      animation: beatPulse 0.55s infinite ease-in-out;
     }
-    @keyframes beatHeart {
+    @keyframes beatPulse {
       0% { transform: scale(1); }
       30% { transform: scale(1.35); }
       50% { transform: scale(1.1); }
@@ -490,15 +523,15 @@
     .balloons-flex {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
-      margin: 20px 0;
-      width: 270px;
+      gap: 12px;
+      margin: 16px 0;
+      width: 260px;
     }
     .balloon-item {
-      font-size: 46px;
+      font-size: 42px;
       cursor: pointer;
       transition: transform 0.2s ease;
-      filter: drop-shadow(0 6px 12px rgba(255,105,180,0.35));
+      filter: drop-shadow(0 6px 14px rgba(255,105,180,0.35));
     }
     .balloon-item:active { transform: scale(0.8); }
 
@@ -511,7 +544,7 @@
       background: rgba(255, 255, 255, 0.08);
       padding: 8px;
       border-radius: 18px;
-      margin: 15px 0;
+      margin: 10px 0;
     }
     .tile {
       width: 80px;
@@ -520,22 +553,21 @@
       background-size: 240px 240px;
       border-radius: 8px;
       cursor: pointer;
-      transition: transform 0.2s;
     }
     .tile.blank {
-      background: rgba(0, 0, 0, 0.5);
+      background: rgba(0, 0, 0, 0.55);
       border: 1px dashed rgba(255, 255, 255, 0.25);
     }
 
     /* Screen 12: Scratch Card */
     .scratch-wrapper {
       position: relative;
-      width: 300px;
-      height: 165px;
+      width: 290px;
+      height: 160px;
       border-radius: 18px;
       overflow: hidden;
       box-shadow: 0 15px 40px rgba(0,0,0,0.7);
-      margin: 15px 0;
+      margin: 10px 0;
     }
     .scratch-secret {
       position: absolute;
@@ -559,29 +591,29 @@
     .coupons-list {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
       width: 100%;
-      max-width: 310px;
-      margin: 10px 0;
+      max-width: 300px;
+      margin: 8px 0;
     }
     .coupon-card {
       background: rgba(255, 255, 255, 0.06);
       border: 1px dashed #ff9ab6;
-      border-radius: 16px;
-      padding: 12px 14px;
+      border-radius: 14px;
+      padding: 10px 12px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       text-align: left;
     }
-    .coupon-info h4 { font-size: 13px; color: #fff; margin-bottom: 2px; }
-    .coupon-info p { font-size: 11px; color: #d6b8c8; }
+    .coupon-info h4 { font-size: 12.5px; color: #fff; margin-bottom: 2px; }
+    .coupon-info p { font-size: 10.5px; color: #d6b8c8; }
     .btn-claim {
       background: #ff3377;
       border: none;
       color: #fff;
       font-size: 11px;
-      padding: 6px 14px;
+      padding: 5px 12px;
       border-radius: 20px;
       cursor: pointer;
       font-weight: 600;
@@ -591,23 +623,52 @@
       color: #ffd166;
     }
 
-    /* Screen 14: Letter */
-    .typewriter-letter {
+    /* Screen 14: Diary */
+    .diary-scene {
+      width: 290px;
+      height: 360px;
+      perspective: 1000px;
+      margin: 6px 0;
+      position: relative;
+    }
+    .diary-book {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #3d122b, #210717);
+      border-radius: 16px;
+      border: 2px solid rgba(255, 182, 193, 0.3);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.85);
+      position: relative;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .diary-ribbon {
+      width: 32px;
+      height: 100%;
+      background: linear-gradient(to right, #ffd700, #ff9900);
+      position: absolute;
+      left: 28px;
+      box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+    }
+    .diary-open-view {
       display: none;
-      background: rgba(16, 4, 20, 0.88);
-      border-left: 3px solid #ff758c;
+      width: 100%;
+      height: 100%;
+      background: #fff8f0;
       border-radius: 14px;
-      padding: 22px;
+      padding: 18px 16px;
       text-align: left;
       font-family: 'Playfair Display', serif;
       font-style: italic;
-      font-size: 14.5px;
-      line-height: 1.8;
-      color: #ffe6f0;
-      max-height: 380px;
+      font-size: 13.5px;
+      line-height: 1.75;
+      color: #2b1122;
       overflow-y: auto;
-      margin: 10px 0;
-      box-shadow: inset 0 0 25px rgba(0,0,0,0.85);
+      box-shadow: inset 0 0 25px rgba(0,0,0,0.15), 0 15px 40px rgba(0,0,0,0.8);
     }
   </style>
 </head>
@@ -615,41 +676,44 @@
 
   <audio id="bgSong" src="song.mp3" loop></audio>
 
-  <div class="bokeh-wrap" id="bokehContainer"></div>
+  <canvas id="ambientSkyCanvas"></canvas>
+  <div class="aurora-mesh"></div>
 
-  <div class="curtain-view" id="curtainOverlay" style="display:none;">
-    <div class="curtain-panel curtain-left"></div>
-    <div class="curtain-panel curtain-right"></div>
-    <div class="curtain-center-btn">
-      <button class="btn-pill" style="font-size: 17px; padding: 15px 36px;" onclick="pullCurtains()">💖 Open Curtains</button>
+  <div class="curtain-screen" id="curtainOverlay" style="display:none;">
+    <div class="curtain-wing left-wing"></div>
+    <div class="curtain-wing right-wing"></div>
+    <div class="curtain-trigger">
+      <button class="btn-liquid" style="font-size: 17px; padding: 15px 36px;" onclick="pullCurtains()">💖 Open Curtains</button>
     </div>
   </div>
 
-  <div class="app-viewport">
+  <div class="viewport">
 
     <div class="screen active" id="screen-gift">
+      <img class="screen-cat" src="https://media.giphy.com/media/ICOgUNjpvO0PC/giphy.gif" alt="Waving Cat" />
       <h1 class="title">A surprise awaits you... ✨</h1>
       <p class="subtitle">Something special, just for you 💕</p>
       
-      <div class="gift-3d-scene" onclick="openGiftBox()">
-        <div class="gift-cube">
-          <div class="cube-lid">
-            <div class="cube-bow">🎀</div>
+      <div class="gift-stage floating-element" onclick="openGiftBox()">
+        <div class="gift-3d-box">
+          <div class="gift-lid">
+            <div class="gift-ribbon-bow">🎀</div>
           </div>
-          <div class="cube-body"></div>
+          <div class="gift-body"></div>
         </div>
       </div>
 
-      <p style="font-size: 13px; color: #ffd166; margin-top: 10px;">Tap the gift to open 🎁</p>
+      <p style="font-size: 13px; color: #ffd166;">Tap the gift to open 🎁</p>
     </div>
 
     <div class="screen" id="screen-lock">
+      <img class="screen-cat" src="https://media.giphy.com/media/BzyTuYCmvSORqs1ABM/giphy.gif" alt="Peeking Cat" />
       <div class="clock-widget" id="liveClock">23:01</div>
-      <p class="subtitle" style="margin-bottom: 12px;">Birthday Surprise 💖</p>
+      <p class="subtitle" style="margin-bottom: 6px;">Birthday Surprise 💖</p>
       
-      <div class="glass-keypad">
-        <div style="font-size: 26px;" id="lockIcon">🔒</div>
-        <p style="font-size: 12px; margin-top: 2px; color: #ffb6c1;">Enter secret code 💕 (Hint: 2709)</p>
+      <div class="keypad-glass floating-element">
+        <div style="font-size: 24px;" id="lockIcon">🔒</div>
+        <p style="font-size: 11.5px; margin-top: 2px; color: #ffb6c1;">Enter secret code 💕 (Hint: 2709)</p>
 
         <div class="pin-dots">
           <div class="pin-dot" id="d1"></div>
@@ -658,85 +722,85 @@
           <div class="pin-dot" id="d4"></div>
         </div>
 
-        <div class="key-grid">
-          <button class="dial-key" onclick="pressKey(1)">1</button>
-          <button class="dial-key" onclick="pressKey(2)">2</button>
-          <button class="dial-key" onclick="pressKey(3)">3</button>
-          <button class="dial-key" onclick="pressKey(4)">4</button>
-          <button class="dial-key" onclick="pressKey(5)">5</button>
-          <button class="dial-key" onclick="pressKey(6)">6</button>
-          <button class="dial-key" onclick="pressKey(7)">7</button>
-          <button class="dial-key" onclick="pressKey(8)">8</button>
-          <button class="dial-key" onclick="pressKey(9)">9</button>
-          <button class="dial-key" style="font-size: 16px;" onclick="clearKey()">✕</button>
-          <button class="dial-key" onclick="pressKey(0)">0</button>
-          <button class="dial-key" style="font-size: 18px;" onclick="backspaceKey()">⌫</button>
+        <div class="key-matrix">
+          <button class="dial-btn" onclick="pressKey(1)">1</button>
+          <button class="dial-btn" onclick="pressKey(2)">2</button>
+          <button class="dial-btn" onclick="pressKey(3)">3</button>
+          <button class="dial-btn" onclick="pressKey(4)">4</button>
+          <button class="dial-btn" onclick="pressKey(5)">5</button>
+          <button class="dial-btn" onclick="pressKey(6)">6</button>
+          <button class="dial-btn" onclick="pressKey(7)">7</button>
+          <button class="dial-btn" onclick="pressKey(8)">8</button>
+          <button class="dial-btn" onclick="pressKey(9)">9</button>
+          <button class="dial-btn" style="font-size: 16px;" onclick="clearKey()">✕</button>
+          <button class="dial-btn" onclick="pressKey(0)">0</button>
+          <button class="dial-btn" style="font-size: 18px;" onclick="backspaceKey()">⌫</button>
         </div>
       </div>
     </div>
 
     <div class="screen" id="screen-loader">
-      <div style="font-size: 42px; margin-bottom: 20px; animation: flameMotion 1s infinite alternate;">🐻</div>
+      <img class="screen-cat" src="https://media.giphy.com/media/MDJ9IbxxvDUQM/giphy.gif" alt="Excited Cat" />
       <h1 class="title">There's something special I want to tell you...</h1>
       <p class="subtitle">that's why I made something special for you...</p>
-      <button class="btn-pill" onclick="goToScreen('screen-cake')">Continue ✨</button>
+      <button class="btn-liquid" onclick="goToScreen('screen-cake')">Continue ✨</button>
     </div>
 
     <div class="screen" id="screen-cake">
+      <img class="screen-cat" src="https://media.giphy.com/media/jpbnoe3UIa8TU8LM13/giphy.gif" alt="Party Birthday Cat" />
       <h1 class="title">Happy Birthday Cutiepie 🎂</h1>
-      <p class="subtitle">The World Has Been Better Since ❤️</p>
+      <p class="subtitle">The World Has Been Sweeter Since 2008 ❤️</p>
 
-      <div class="stat-counter-grid">
-        <div class="stat-tile"><h3 id="cYears">0</h3><span>YEARS</span></div>
-        <div class="stat-tile"><h3 id="cDays">0</h3><span>DAYS</span></div>
-        <div class="stat-tile"><h3 id="cHours">0</h3><span>HOURS</span></div>
-        <div class="stat-tile"><h3 id="cMins">0</h3><span>MINUTES</span></div>
+      <div class="counter-grid">
+        <div class="counter-box"><h3 id="cYears">0</h3><span>YEARS</span></div>
+        <div class="counter-box"><h3 id="cDays">0</h3><span>DAYS</span></div>
+        <div class="counter-box"><h3 id="cHours">0</h3><span>HOURS</span></div>
+        <div class="counter-box"><h3 id="cMins">0</h3><span>MINUTES</span></div>
       </div>
 
-      <div class="cake-art" onclick="blowCandles()">
-        <div class="cake-top-layer"></div>
+      <div class="cake-showcase floating-element" onclick="blowCandles()">
+        <div class="cake-top"></div>
         <div class="cake-base"></div>
-        <div class="candle candle-1">
-          1
-          <div class="candle-flame" id="flame1"></div>
-        </div>
-        <div class="candle candle-2">
-          8
-          <div class="candle-flame" id="flame2"></div>
-        </div>
+        <div class="candle candle-1">1<div class="flame" id="flame1"></div></div>
+        <div class="candle candle-2">8<div class="flame" id="flame2"></div></div>
       </div>
 
-      <p id="cakeInstruction" style="font-size: 13px; color: #ffd166; margin-top: 14px;">Tap the cake to blow the candles 🌬️</p>
-      <button class="btn-pill" id="btnCakeNext" style="display:none;" onclick="goToScreen('screen-starmap')">See The Sky That Night 🌌</button>
+      <p id="cakeInstruction" style="font-size: 12.5px; color: #ffd166; margin-top: 10px;">Tap the cake to blow the candles 🌬️</p>
+      <button class="btn-liquid" id="btnCakeNext" style="display:none;" onclick="goToScreen('screen-starmap')">See The Sky That Night 🌌</button>
     </div>
 
     <div class="screen" id="screen-starmap">
+      <img class="screen-cat" src="https://media.giphy.com/media/Lq0h93752f6J9tijrh/giphy.gif" alt="Dreamy Starlight Cat" />
       <h1 class="title">27th September 2008 🌌</h1>
-      <p class="subtitle">The universe got a lot brighter the day you were born ✨</p>
+      <p class="subtitle">The universe got brighter the day you were born ✨</p>
       
-      <canvas class="starmap-canvas" id="starCanvas" width="285" height="285"></canvas>
+      <div class="starmap-stage floating-element">
+        <canvas id="interactiveStarMap" width="270" height="270"></canvas>
+      </div>
       
-      <p style="font-size: 12px; color: #d8c2e6; margin-top: 6px;">"You were written in the stars for me."</p>
-      <button class="btn-pill" onclick="goToScreen('screen-memories')">Our Cute Memories 🌸</button>
+      <p style="font-size: 11.5px; color: #d8c2e6; margin-top: 4px;">"You were written in the stars for me."</p>
+      <button class="btn-liquid" onclick="goToScreen('screen-memories')">Our Cute Memories 🌸</button>
     </div>
 
     <div class="screen" id="screen-memories">
+      <img class="screen-cat" src="https://media.giphy.com/media/VbnUQIRNNGLzfNVcvC/giphy.gif" alt="Camera Cat" />
       <h1 class="title">Cute Memories 💕</h1>
       <p class="subtitle">Swipe or tap to see our journey</p>
 
-      <div class="polaroid-frame" onclick="nextPhoto()">
+      <div class="polaroid-liquid floating-element" onclick="nextPhoto()">
         <img id="polaroidImage" src="IMG_20260905_205301_817.jpg" alt="Memory">
         <p id="polaroidCaption">Our first sweet adventure together 🌸</p>
       </div>
 
-      <button class="btn-pill" onclick="nextPhoto()">Next Surprise 🎁</button>
+      <button class="btn-liquid" onclick="nextPhoto()">Next Surprise 🎁</button>
     </div>
 
     <div class="screen" id="screen-reasons">
+      <img class="screen-cat" src="https://media.giphy.com/media/c76IJLufpNwSULPk77/giphy.gif" alt="Love Heart Cat" />
       <h1 class="title">Why I Adore You 💖</h1>
       <p class="subtitle">Tap each card to reveal what I love about you</p>
 
-      <div class="reasons-grid">
+      <div class="reasons-container">
         <div class="flip-card" onclick="flipCard(this)">
           <div class="card-face card-front">Reason #1 ✨</div>
           <div class="card-face card-back">The way your eyes sparkle whenever you smile genuinely 💕</div>
@@ -755,73 +819,78 @@
         </div>
       </div>
 
-      <button class="btn-pill" id="btnReasonsNext" style="display:none;" onclick="goToScreen('screen-touchsync')">Feel My Presence 🤍</button>
+      <button class="btn-liquid" id="btnReasonsNext" style="display:none;" onclick="goToScreen('screen-touchsync')">Feel My Presence 🤍</button>
     </div>
 
     <div class="screen" id="screen-touchsync">
+      <img class="screen-cat" src="https://media.giphy.com/media/kZqbBT64ECqdy/giphy.gif" alt="Cuddle Hug Cat" />
       <h1 class="title">Heartbeat Sync 💓</h1>
       <p class="subtitle">Place and hold your thumb on the heart</p>
 
-      <div class="touch-sync-pad" id="touchSyncBox">
-        <div class="touch-heart" style="font-size: 50px;">❤️</div>
-        <span style="font-size: 12px; color: #ffd166; margin-top: 6px;" id="touchProgress">Hold for 3s...</span>
+      <div class="touch-sync-orb floating-element" id="touchSyncBox">
+        <div class="heart-icon" style="font-size: 46px;">❤️</div>
+        <span style="font-size: 11.5px; color: #ffd166; margin-top: 4px;" id="touchProgress">Hold for 3s...</span>
       </div>
 
-      <p id="touchSyncStatus" style="font-size: 12.5px; color: #ffd166; min-height: 24px;">Feel the rhythm of my love for you...</p>
-      <button class="btn-pill" id="btnTouchNext" style="display:none;" onclick="goToScreen('screen-wishes')">Pop The Wishes 🎈</button>
+      <p id="touchSyncStatus" style="font-size: 12px; color: #ffd166; min-height: 20px;">Feel the rhythm of my love for you...</p>
+      <button class="btn-liquid" id="btnTouchNext" style="display:none;" onclick="goToScreen('screen-wishes')">Pop The Wishes 🎈</button>
     </div>
 
     <div class="screen" id="screen-wishes">
+      <img class="screen-cat" src="https://media.giphy.com/media/13borq7Zo2kulO/giphy.gif" alt="Playful Cat" />
       <h1 class="title">Pop the Wishes 🎈</h1>
       <p class="subtitle">Tap each balloon to reveal a wish</p>
 
       <div class="balloons-flex">
-        <div class="balloon-item" onclick="popBalloon(0, this)">🎈</div>
-        <div class="balloon-item" onclick="popBalloon(1, this)">🎈</div>
-        <div class="balloon-item" onclick="popBalloon(2, this)">🎈</div>
-        <div class="balloon-item" onclick="popBalloon(3, this)">🎈</div>
-        <div class="balloon-item" onclick="popBalloon(4, this)">🎈</div>
-        <div class="balloon-item" onclick="popBalloon(5, this)">🎈</div>
+        <div class="balloon-item floating-element" onclick="popBalloon(0, this)">🎈</div>
+        <div class="balloon-item floating-element" onclick="popBalloon(1, this)">🎈</div>
+        <div class="balloon-item floating-element" onclick="popBalloon(2, this)">🎈</div>
+        <div class="balloon-item floating-element" onclick="popBalloon(3, this)">🎈</div>
+        <div class="balloon-item floating-element" onclick="popBalloon(4, this)">🎈</div>
+        <div class="balloon-item floating-element" onclick="popBalloon(5, this)">🎈</div>
       </div>
 
-      <p id="balloonWishText" style="min-height: 48px; color: #ffd166; font-size: 13.5px; font-weight: 500;">Tap any balloon! ✨</p>
-      <button class="btn-pill" id="btnBalloonsNext" style="display:none;" onclick="goToScreen('screen-puzzle')">Solve The Surprise 🧩</button>
+      <p id="balloonWishText" style="min-height: 44px; color: #ffd166; font-size: 13px; font-weight: 500;">Tap any balloon! ✨</p>
+      <button class="btn-liquid" id="btnBalloonsNext" style="display:none;" onclick="goToScreen('screen-puzzle')">Solve The Surprise 🧩</button>
     </div>
 
     <div class="screen" id="screen-puzzle">
+      <img class="screen-cat" src="https://media.giphy.com/media/ule4akeXnY9A50kDWU/giphy.gif" alt="Thinker Cat" />
       <h1 class="title">Birthday Puzzle 🎂</h1>
       <p class="subtitle">Solve to unlock a special message ✨</p>
 
       <div class="puzzle-board" id="puzzleBoard"></div>
 
       <div style="display: flex; gap: 10px;">
-        <button class="btn-pill" onclick="shufflePuzzle()">🔀 Shuffle</button>
-        <button class="btn-pill" onclick="solvePuzzle()">✨ Solve it for me</button>
+        <button class="btn-liquid" onclick="shufflePuzzle()">🔀 Shuffle</button>
+        <button class="btn-liquid" onclick="solvePuzzle()">✨ Solve it for me</button>
       </div>
-      <button class="btn-pill" id="btnPuzzleNext" style="display:none; margin-top: 10px;" onclick="goToScreen('screen-scratch')">One Last Surprise ✨</button>
+      <button class="btn-liquid" id="btnPuzzleNext" style="display:none; margin-top: 10px;" onclick="goToScreen('screen-scratch')">One Last Surprise ✨</button>
     </div>
 
     <div class="screen" id="screen-scratch">
+      <img class="screen-cat" src="https://media.giphy.com/media/mlvseq9yvZhba/giphy.gif" alt="Scratching Cat" />
       <h1 class="title">One Last Surprise ✨</h1>
       <p class="subtitle">Scratch the card to reveal it 🪙</p>
 
-      <div class="scratch-wrapper">
+      <div class="scratch-wrapper floating-element">
         <div class="scratch-secret">
           <h2 style="font-size: 20px; color: #fff;">🎉 Happy Birthday! 🎉</h2>
-          <p style="font-size: 12.5px; color: #ffd166; margin-top: 4px;">You found the hidden treasure! You mean everything to me ❤️</p>
+          <p style="font-size: 12px; color: #ffd166; margin-top: 4px;">You found the hidden treasure! You mean everything to me ❤️</p>
         </div>
-        <canvas id="scratchCanvas" width="300" height="165"></canvas>
+        <canvas id="scratchCanvas" width="290" height="160"></canvas>
       </div>
 
-      <button class="btn-pill" id="btnScratchNext" style="display:none;" onclick="goToScreen('screen-coupons')">My Promises To You 🎟️</button>
+      <button class="btn-liquid" id="btnScratchNext" style="display:none;" onclick="goToScreen('screen-coupons')">My Promises To You 🎟️</button>
     </div>
 
     <div class="screen" id="screen-coupons">
+      <img class="screen-cat" src="https://media.giphy.com/media/GeimqsH0TLDt4tScGw/giphy.gif" alt="Vibing Treats Cat" />
       <h1 class="title">Love Coupons 🎟️</h1>
       <p class="subtitle">Valid Forever • Redeem anytime no questions asked!</p>
 
       <div class="coupons-list">
-        <div class="coupon-card">
+        <div class="coupon-card floating-element">
           <div class="coupon-info">
             <h4>🍨 Late Night Ice-Cream Date</h4>
             <p>Craving something sweet? Redeem this!</p>
@@ -829,7 +898,7 @@
           <button class="btn-claim" onclick="claimCoupon(this)">Claim</button>
         </div>
 
-        <div class="coupon-card">
+        <div class="coupon-card floating-element">
           <div class="coupon-info">
             <h4>🏆 "You Win Any Argument"</h4>
             <p>Show this and you automatically win.</p>
@@ -837,7 +906,7 @@
           <button class="btn-claim" onclick="claimCoupon(this)">Claim</button>
         </div>
 
-        <div class="coupon-card">
+        <div class="coupon-card floating-element">
           <div class="coupon-info">
             <h4>🫂 Unlimited Warm Hugs</h4>
             <p>For any day you feel even a little low.</p>
@@ -846,32 +915,38 @@
         </div>
       </div>
 
-      <button class="btn-pill" onclick="goToScreen('screen-letter')">Read My Letter 💌</button>
+      <button class="btn-liquid" onclick="goToScreen('screen-diary')">Open My Diary 📖</button>
     </div>
 
-    <div class="screen" id="screen-letter">
+    <div class="screen" id="screen-diary">
+      <img class="screen-cat" src="https://media.giphy.com/media/unQ3IJU2RG7DO/giphy.gif" alt="Writing Cat" />
       <h1 class="title">A Letter Just For You</h1>
-      <p class="subtitle">Straight from my heart</p>
+      <p class="subtitle">Written straight from my heart</p>
 
-      <div style="font-size: 65px; cursor: pointer; margin: 20px 0;" id="envelopeIcon" onclick="openLetter()">💌</div>
-      
-      <div class="typewriter-letter" id="typewriterText"></div>
+      <div class="diary-scene">
+        <div class="diary-book floating-element" id="diaryCover" onclick="openSecretDiary()">
+          <div class="diary-ribbon"></div>
+          <div style="font-size: 42px; margin-bottom: 6px;">📖</div>
+          <h3 style="font-family: 'Dancing Script', cursive; font-size: 26px; color: #ffd700;">Secret Journal</h3>
+          <p style="font-size: 11px; color: #e2b6cf; margin-top: 4px;">Tap to unlock pages</p>
+        </div>
 
-      <button class="btn-pill" id="btnReplay" style="display:none;" onclick="location.reload()">Replay 🔄</button>
+        <div class="diary-open-view" id="diaryPages"></div>
+      </div>
+
+      <button class="btn-liquid" id="btnReplay" style="display:none;" onclick="location.reload()">Replay 🔄</button>
     </div>
 
   </div>
 
   <script>
-    // Audio Autoplay Helper
-    function triggerAudio() {
+    function startMusic() {
       const a = document.getElementById("bgSong");
       if (a && a.paused) a.play().catch(() => {});
     }
-    window.addEventListener("click", triggerAudio, { once: true });
-    window.addEventListener("touchstart", triggerAudio, { once: true });
+    window.addEventListener("click", startMusic, { once: true });
+    window.addEventListener("touchstart", startMusic, { once: true });
 
-    // Live Clock Widget
     function tickClock() {
       const now = new Date();
       const h = String(now.getHours()).padStart(2, '0');
@@ -882,35 +957,63 @@
     setInterval(tickClock, 1000);
     tickClock();
 
-    // Bokeh Ambient Dots
-    const bWrap = document.getElementById("bokehContainer");
-    for (let i = 0; i < 20; i++) {
-      const d = document.createElement("div");
-      d.className = "bokeh-orb";
-      const s = Math.random() * 85 + 40;
-      d.style.width = `${s}px`;
-      d.style.height = `${s}px`;
-      d.style.left = `${Math.random() * 100}%`;
-      d.style.top = `${Math.random() * 100}%`;
-      d.style.animationDuration = `${Math.random() * 5 + 4}s`;
-      d.style.animationDelay = `${Math.random() * 3}s`;
-      bWrap.appendChild(d);
+    const bgCvs = document.getElementById("ambientSkyCanvas");
+    const bgCtx = bgCvs.getContext("2d");
+    let bgStars = [];
+    const heartColors = ["#ff758c", "#ff9a9e", "#fecfef", "#ff4e50", "#f9d423", "#a18cd1", "#fad0c4"];
+
+    function resizeSky() {
+      bgCvs.width = window.innerWidth;
+      bgCvs.height = window.innerHeight;
+      bgStars = [];
+      for (let i = 0; i < 85; i++) {
+        bgStars.push({
+          x: Math.random() * bgCvs.width,
+          y: Math.random() * bgCvs.height,
+          radius: Math.random() * 1.8,
+          speed: Math.random() * 0.4 + 0.15,
+          color: heartColors[Math.floor(Math.random() * heartColors.length)],
+          alpha: Math.random() * 0.8 + 0.2
+        });
+      }
     }
+    window.addEventListener("resize", resizeSky);
+    resizeSky();
+
+    function renderSky() {
+      bgCtx.clearRect(0, 0, bgCvs.width, bgCvs.height);
+      bgStars.forEach(s => {
+        s.y -= s.speed;
+        if (s.y < 0) {
+          s.y = bgCvs.height;
+          s.x = Math.random() * bgCvs.width;
+        }
+        bgCtx.fillStyle = s.color;
+        bgCtx.globalAlpha = s.alpha;
+        bgCtx.beginPath();
+        bgCtx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
+        bgCtx.fill();
+      });
+      requestAnimationFrame(renderSky);
+    }
+    renderSky();
 
     function goToScreen(id) {
       document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
       const t = document.getElementById(id);
-      if (t) t.classList.add("active");
+      if (t) {
+        t.classList.add("active");
+        if (id === "screen-cake") animateMilestones("2008-09-27");
+        if (id === "screen-starmap") startStarDrift();
+      }
     }
 
-    // Screen 1: Open Gift
     function openGiftBox() {
-      document.querySelector(".gift-3d-scene").classList.add("opened");
-      confetti({ particleCount: 75, spread: 80, origin: { y: 0.6 } });
-      setTimeout(() => goToScreen("screen-lock"), 700);
+      document.querySelector(".gift-stage").classList.add("opened");
+      confetti({ particleCount: 85, spread: 90, origin: { y: 0.6 } });
+      setTimeout(() => goToScreen("screen-lock"), 750);
     }
 
-    // Screen 2: Passcode Verification
     const PIN = "2709";
     let entered = "";
 
@@ -918,9 +1021,7 @@
       if (entered.length < 4) {
         entered += n;
         renderDots();
-        if (entered.length === 4) {
-          setTimeout(checkPin, 200);
-        }
+        if (entered.length === 4) setTimeout(checkPin, 200);
       }
     }
     function clearKey() { entered = ""; renderDots(); }
@@ -935,7 +1036,7 @@
     function checkPin() {
       if (entered === PIN) {
         document.getElementById("lockIcon").innerText = "🔓";
-        confetti({ particleCount: 50, spread: 70 });
+        confetti({ particleCount: 60, spread: 75 });
         setTimeout(() => {
           document.getElementById("curtainOverlay").style.display = "flex";
         }, 350);
@@ -945,73 +1046,100 @@
       }
     }
 
-    // Curtain Action
     function pullCurtains() {
       const c = document.getElementById("curtainOverlay");
       c.classList.add("opened");
       setTimeout(() => {
         c.style.display = "none";
         goToScreen("screen-loader");
-        calculateTime("2008-09-27");
-        setTimeout(drawStarMap, 200);
-      }, 1000);
+      }, 1100);
     }
 
-    // Age Calculator
-    function calculateTime(bdate) {
+    function animateMilestones(bdate) {
       const b = new Date(bdate);
       const diff = new Date() - b;
-      document.getElementById("cYears").innerText = Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25));
-      document.getElementById("cDays").innerText = Math.floor(diff / (1000 * 60 * 60 * 24)).toLocaleString();
-      document.getElementById("cHours").innerText = Math.floor(diff / (1000 * 60 * 60)).toLocaleString();
-      document.getElementById("cMins").innerText = Math.floor(diff / (1000 * 60)).toLocaleString();
+      const targetYears = Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25));
+      const targetDays = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const targetHours = Math.floor(diff / (1000 * 60 * 60));
+      const targetMins = Math.floor(diff / (1000 * 60));
+
+      function rollCounter(elId, target, duration) {
+        const el = document.getElementById(elId);
+        const start = Date.now();
+        const interval = setInterval(() => {
+          const progress = Math.min((Date.now() - start) / duration, 1);
+          const current = Math.floor(progress * target);
+          el.innerText = current.toLocaleString();
+          if (progress === 1) clearInterval(interval);
+        }, 30);
+      }
+      rollCounter("cYears", targetYears, 1400);
+      rollCounter("cDays", targetDays, 1400);
+      rollCounter("cHours", targetHours, 1600);
+      rollCounter("cMins", targetMins, 1800);
     }
 
     function blowCandles() {
       document.getElementById("flame1").style.display = "none";
       document.getElementById("flame2").style.display = "none";
       document.getElementById("cakeInstruction").innerText = "Candles blown! Wishes sent to the universe ✨";
-      confetti({ particleCount: 80, spread: 90, origin: { y: 0.7 } });
+      confetti({ particleCount: 90, spread: 100, origin: { y: 0.7 } });
       document.getElementById("btnCakeNext").style.display = "inline-flex";
     }
 
-    // Dynamic Star Map (September 27, 2008)
-    function drawStarMap() {
-      const cvs = document.getElementById("starCanvas");
-      if (!cvs) return;
+    let starMapTimer;
+    function startStarDrift() {
+      const cvs = document.getElementById("interactiveStarMap");
       const ctx = cvs.getContext("2d");
-      ctx.clearRect(0, 0, cvs.width, cvs.height);
+      let starField = [];
 
-      for (let i = 0; i < 115; i++) {
-        const x = Math.random() * cvs.width;
-        const y = Math.random() * cvs.height;
-        ctx.fillStyle = `rgba(255, 255, 255, ${Math.random() * 0.8 + 0.2})`;
-        ctx.beginPath();
-        ctx.arc(x, y, Math.random() * 1.5, 0, Math.PI * 2);
-        ctx.fill();
+      for (let i = 0; i < 100; i++) {
+        starField.push({
+          x: Math.random() * cvs.width,
+          y: Math.random() * cvs.height,
+          size: Math.random() * 1.5,
+          twinkle: Math.random() * 0.04 + 0.01,
+          alpha: Math.random()
+        });
       }
 
-      ctx.strokeStyle = "rgba(255, 215, 0, 0.45)";
-      ctx.lineWidth = 1;
-      const constellation = [
-        {x: 60, y: 75}, {x: 120, y: 95}, {x: 155, y: 145},
-        {x: 210, y: 115}, {x: 225, y: 185}, {x: 155, y: 220}
-      ];
-      ctx.beginPath();
-      ctx.moveTo(constellation[0].x, constellation[0].y);
-      constellation.forEach(p => {
-        ctx.lineTo(p.x, p.y);
-        ctx.arc(p.x, p.y, 2.5, 0, Math.PI * 2);
-      });
-      ctx.stroke();
+      function loopMap() {
+        ctx.clearRect(0, 0, cvs.width, cvs.height);
 
-      ctx.fillStyle = "rgba(255, 240, 200, 0.95)";
-      ctx.beginPath();
-      ctx.arc(225, 55, 17, 0, Math.PI * 2);
-      ctx.fill();
+        starField.forEach(st => {
+          st.alpha += st.twinkle;
+          if (st.alpha > 1 || st.alpha < 0.2) st.twinkle = -st.twinkle;
+          ctx.fillStyle = `rgba(255, 255, 255, ${st.alpha})`;
+          ctx.beginPath();
+          ctx.arc(st.x, st.y, st.size, 0, Math.PI * 2);
+          ctx.fill();
+        });
+
+        ctx.strokeStyle = "rgba(255, 215, 0, 0.55)";
+        ctx.lineWidth = 1;
+        const pts = [
+          {x: 55, y: 70}, {x: 110, y: 90}, {x: 145, y: 135},
+          {x: 195, y: 110}, {x: 210, y: 175}, {x: 145, y: 210}
+        ];
+        ctx.beginPath();
+        ctx.moveTo(pts[0].x, pts[0].y);
+        pts.forEach(p => {
+          ctx.lineTo(p.x, p.y);
+          ctx.arc(p.x, p.y, 2.5, 0, Math.PI * 2);
+        });
+        ctx.stroke();
+
+        ctx.fillStyle = "rgba(255, 240, 200, 0.95)";
+        ctx.beginPath();
+        ctx.arc(210, 50, 16, 0, Math.PI * 2);
+        ctx.fill();
+
+        starMapTimer = requestAnimationFrame(loopMap);
+      }
+      cancelAnimationFrame(starMapTimer);
+      loopMap();
     }
 
-    // Photos
     const photos = [
       { url: "IMG_20260905_205301_817.jpg", caption: "Our first sweet adventure together 🌸" },
       { url: "IMG_20260905_223215_019.jpg", caption: "Making every moment magical ✨" },
@@ -1029,33 +1157,29 @@
       }
     }
 
-    // Flip Cards
     let flipCt = 0;
-    function flipCard(card) {
-      if (!card.classList.contains("flipped")) {
-        card.classList.add("flipped");
+    function flipCard(c) {
+      if (!c.classList.contains("flipped")) {
+        c.classList.add("flipped");
         flipCt++;
-        confetti({ particleCount: 20, spread: 40 });
-        if (flipCt >= 3) {
-          document.getElementById("btnReasonsNext").style.display = "inline-flex";
-        }
+        confetti({ particleCount: 25, spread: 45 });
+        if (flipCt >= 3) document.getElementById("btnReasonsNext").style.display = "inline-flex";
       }
     }
 
-    // Thumb Hold Sync
-    const syncBox = document.getElementById("touchSyncBox");
-    let hTimer = null, hSec = 0;
+    const syncPad = document.getElementById("touchSyncBox");
+    let syncTimer = null, syncSec = 0;
 
     function onHoldStart() {
-      syncBox.classList.add("holding");
-      hSec = 0;
-      if (navigator.vibrate) navigator.vibrate([80, 80]);
-      hTimer = setInterval(() => {
-        hSec += 0.5;
+      syncPad.classList.add("holding");
+      syncSec = 0;
+      if (navigator.vibrate) navigator.vibrate([70, 70]);
+      syncTimer = setInterval(() => {
+        syncSec += 0.5;
         if (navigator.vibrate) navigator.vibrate(50);
-        document.getElementById("touchProgress").innerText = `Syncing: ${Math.round((hSec/3)*100)}%`;
-        if (hSec >= 3) {
-          clearInterval(hTimer);
+        document.getElementById("touchProgress").innerText = `Syncing: ${Math.round((syncSec/3)*100)}%`;
+        if (syncSec >= 3) {
+          clearInterval(syncTimer);
           document.getElementById("touchSyncStatus").innerText = "Connection Complete! Heartbeats synced forever ❤️";
           document.getElementById("touchProgress").innerText = "Synced! ✨";
           confetti({ particleCount: 75, spread: 80 });
@@ -1064,18 +1188,17 @@
       }, 500);
     }
     function onHoldEnd() {
-      syncBox.classList.remove("holding");
-      if (hSec < 3) {
-        clearInterval(hTimer);
+      syncPad.classList.remove("holding");
+      if (syncSec < 3) {
+        clearInterval(syncTimer);
         document.getElementById("touchProgress").innerText = "Hold for 3s...";
       }
     }
-    syncBox.addEventListener("mousedown", onHoldStart);
-    syncBox.addEventListener("mouseup", onHoldEnd);
-    syncBox.addEventListener("touchstart", (e) => { e.preventDefault(); onHoldStart(); });
-    syncBox.addEventListener("touchend", onHoldEnd);
+    syncPad.addEventListener("mousedown", onHoldStart);
+    syncPad.addEventListener("mouseup", onHoldEnd);
+    syncPad.addEventListener("touchstart", (e) => { e.preventDefault(); onHoldStart(); });
+    syncPad.addEventListener("touchend", onHoldEnd);
 
-    // Balloons Pop
     const wishes = [
       "You make my entire world brighter ☀️",
       "You are my absolute favorite person 💕",
@@ -1091,13 +1214,10 @@
         document.getElementById("balloonWishText").innerText = wishes[idx];
         confetti({ particleCount: 35, spread: 55 });
         pCount++;
-        if (pCount >= 4) {
-          document.getElementById("btnBalloonsNext").style.display = "inline-flex";
-        }
+        if (pCount >= 4) document.getElementById("btnBalloonsNext").style.display = "inline-flex";
       }
     }
 
-    // Puzzle Board
     const pb = document.getElementById("puzzleBoard");
     function renderBoard() {
       pb.innerHTML = "";
@@ -1124,7 +1244,6 @@
       document.getElementById("btnPuzzleNext").style.display = "inline-flex";
     }
 
-    // Scratch Card
     const scCvs = document.getElementById("scratchCanvas");
     const sCtx = scCvs.getContext("2d");
     sCtx.fillStyle = "#a88d9b";
@@ -1132,7 +1251,7 @@
     sCtx.fillStyle = "#ffffff";
     sCtx.font = "bold 15px Poppins";
     sCtx.textAlign = "center";
-    sCtx.fillText("Scratch with your finger 🪙", 150, 85);
+    sCtx.fillText("Scratch with your finger 🪙", 145, 85);
 
     let isScratch = false;
     function doScratch(e) {
@@ -1153,32 +1272,31 @@
     scCvs.addEventListener("touchend", () => isScratch = false);
     scCvs.addEventListener("touchmove", doScratch);
 
-    // Coupons
     function claimCoupon(b) {
       b.innerText = "Claimed! 💕";
       b.classList.add("claimed");
       confetti({ particleCount: 30, spread: 50 });
     }
 
-    // Letter Typewriter
-    const letter = `My dearest,\n\nOn this very special day, I want you to know how deeply loved you are. Every single moment I spend with you feels like a beautiful dream I never want to wake up from.\n\nYou make every ordinary day feel extraordinary. Your smile is my favourite thing in the entire world, and your laugh — oh, your laugh — is the most beautiful sound I have ever heard.\n\nThank you for being you. Thank you for choosing me, every single day. I promise to always be there, to hold your hand through every storm, and to celebrate every little joy with you.\n\nHappy 18th Birthday, my love. You deserve every good thing the universe has to offer.\n\nForever yours with all my heart ❤️`;
+    const diaryContent = `My dearest,\n\nOn this very special day, I want you to know how deeply loved you are. Every single moment I spend with you feels like a beautiful dream I never want to wake up from.\n\nYou make every ordinary day feel extraordinary. Your smile is my favourite thing in the entire world, and your laugh — oh, your laugh — is the most beautiful sound I have ever heard.\n\nThank you for being you. Thank you for choosing me, every single day. I promise to always be there, to hold your hand through every storm, and to celebrate every little joy with you.\n\nHappy 18th Birthday, my love. You deserve every good thing the universe has to offer.\n\nForever yours with all my heart ❤️`;
 
-    function openLetter() {
-      document.getElementById("envelopeIcon").style.display = "none";
-      const lBox = document.getElementById("typewriterText");
-      lBox.style.display = "block";
-      let idx = 0;
-      function write() {
-        if (idx < letter.length) {
-          lBox.innerHTML += (letter.charAt(idx) === '\n') ? '<br/>' : letter.charAt(idx);
-          idx++;
-          setTimeout(write, 35);
+    function openSecretDiary() {
+      document.getElementById("diaryCover").style.display = "none";
+      const pages = document.getElementById("diaryPages");
+      pages.style.display = "block";
+
+      let charIdx = 0;
+      function writeDiary() {
+        if (charIdx < diaryContent.length) {
+          pages.innerHTML += (diaryContent.charAt(charIdx) === '\n') ? '<br/>' : diaryContent.charAt(charIdx);
+          charIdx++;
+          setTimeout(writeDiary, 32);
         } else {
           document.getElementById("btnReplay").style.display = "inline-flex";
-          confetti({ particleCount: 100, spread: 100, origin: { y: 0.5 } });
+          confetti({ particleCount: 110, spread: 100, origin: { y: 0.5 } });
         }
       }
-      write();
+      writeDiary();
     }
   </script>
 </body>
