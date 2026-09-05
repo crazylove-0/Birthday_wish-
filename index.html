@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>A surprise awaits you... ✨</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Playfair+Display:ital,wght@1,500;1,700&family=Sacramento&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: #0c0410;
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .bokeh-bg {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 1;
+      overflow: hidden;
+    }
+    .bokeh-dot {
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(216, 112, 255, 0.45) 0%, rgba(138, 43, 226, 0) 70%);
+      filter: blur(10px);
+      animation: floatBokeh infinite alternate ease-in-out;
+    }
+    @keyframes floatBokeh {
+      from { transform: translateY(0) scale(0.9); opacity: 0.3; }
+      to { transform: translateY(-40px) scale(1.3); opacity: 0.7; }
+    }
+
+    .app-frame {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 410px;
+      height: 96vh;
+      max-height: 840px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .screen {
+      display: none;
+      width: 100%;
+      height: 100%;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      animation: fadeIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    .screen.active { display: flex; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    h1.title {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      background: linear-gradient(135deg, #fff 40%, #ff8cb6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    p.subtitle {
+      font-size: 13px;
+      color: #caa0bf;
+      margin-bottom: 18px;
+    }
+
+    .btn-pill {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 182, 193, 0.35);
+      backdrop-filter: blur(10px);
+      color: #ffc4d6;
+      padding: 12px 28px;
+      border-radius: 40px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 16px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+      transition: 0.25s all ease;
+    }
+    .btn-pill:active { transform: scale(0.95); background: rgba(255, 105, 180, 0.25); }
+
+    /* Screen 1: Gift Box */
+    .gift-wrapper {
+      position: relative;
+      width: 180px;
+      height: 180px;
+      margin: 40px 0;
+      cursor: pointer;
+    }
+    .gift-box {
+      width: 160px;
+      height: 140px;
+      background: linear-gradient(135deg, #e51a80, #9f0052);
+      border-radius: 12px;
+      position: absolute;
+      bottom: 0;
+      left: 10px;
+      box-shadow: 0 20px 40px rgba(229, 26, 128, 0.35);
+    }
+    .gift-box::after {
+      content: '';
+      position: absolute;
+      width: 32px;
+      height: 100%;
+      background: linear-gradient(to right, #ffd700, #ffae00);
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    .gift-lid {
+      width: 180px;
+      height: 40px;
+      background: linear-gradient(135deg, #ff2a94, #bc0061);
+      border-radius: 8px;
+      position: absolute;
+      top: 20px;
+      left: 0;
+      z-index: 3;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    }
+    .gift-lid::after {
+      content: '';
+      position: absolute;
+      width: 32px;
+      height: 100%;
+      background: linear-gradient(to right, #ffd700, #ffae00);
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    .gift-bow {
+      position: absolute;
+      top: -16px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 32px;
+      z-index: 4;
+    }
+    .gift-wrapper.opened .gift-lid {
+      transform: translateY(-80px) rotate(-18deg) scale(0.9);
+      opacity: 0;
+    }
+
+    /* Screen 2: Lock & Numpad */
+    .clock-widget {
+      font-size: 50px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: #ffffff;
+      margin-bottom: 4px;
+    }
+    .pin-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(25px);
+      border-radius: 30px;
+      padding: 22px 18px;
+      width: 95%;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+    }
+    .pin-dots {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      margin: 14px 0;
+    }
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      border: 2px solid #ff758c;
+      transition: 0.2s;
+    }
+    .dot.filled { background: #ff758c; box-shadow: 0 0 10px #ff758c; }
+    .numpad-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .numpad-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      width: 62px;
+      height: 62px;
+      border-radius: 50%;
+      font-size: 22px;
+      font-weight: 600;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: auto;
+      cursor: pointer;
+      transition: 0.15s;
+    }
+    .numpad-btn:active { background: rgba(255, 117, 140, 0.35); transform: scale(0.9); }
+
+    /* Curtains */
+    .curtain-view {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      display: flex;
+      z-index: 10;
+      pointer-events: none;
+    }
+    .curtain-half {
+      width: 50%;
+      height: 100%;
+      background: repeating-linear-gradient(90deg, #0b2265, #081a4e 20px, #102e82 40px);
+      box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.8);
+      transition: transform 1.2s cubic-bezier(0.77, 0, 0.175, 1);
+      pointer-events: auto;
+    }
+    .curtains-open .curtain-left { transform: translateX(-100%); }
+    .curtains-open .curtain-right { transform: translateX(100%); }
+
+    /* Screen 5: Cake & Counter */
+    .stat-counter-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      width: 100%;
+      margin: 15px 0;
+    }
+    .stat-tile {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 10px 4px;
+    }
+    .stat-tile h3 { font-size: 22px; color: #ff8cb6; font-weight: 700; }
+    .stat-tile span { font-size: 11px; color: #caa0bf; }
+
+    .cake-art {
+      position: relative;
+      width: 220px;
+      height: 135px;
+      margin: 15px auto 10px;
+      cursor: pointer;
+    }
+    .cake-base {
+      position: absolute;
+      bottom: 0;
+      width: 220px;
+      height: 60px;
+      background: #f8c8d8;
+      border-radius: 14px 14px 20px 20px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+    }
+    .cake-top-layer {
+      position: absolute;
+      bottom: 52px;
+      left: 25px;
+      width: 170px;
+      height: 50px;
+      background: #ffdbe6;
+      border-radius: 12px 12px 0 0;
+    }
+    .candle {
+      position: absolute;
+      bottom: 102px;
+      width: 22px;
+      height: 36px;
+      background: #ffffff;
+      border-radius: 6px;
+      border: 1px solid #ffccd8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: #d14170;
+      font-size: 15px;
+    }
+    .candle-1 { left: 75px; }
+    .candle-2 { left: 120px; }
+    .candle-flame {
+      position: absolute;
+      top: -18px;
+      width: 12px;
+      height: 18px;
+      background: linear-gradient(#ffea79, #ff5e36);
+      border-radius: 50% 50% 20% 20%;
+      box-shadow: 0 0 14px #ffaa40;
+      animation: flicker 0.3s infinite alternate;
+    }
+    @keyframes flicker {
+      from { transform: scale(1); opacity: 0.9; }
+      to { transform: scale(1.15) rotate(3deg); opacity: 1; }
+    }
+
+    /* Screen 6: Star Map (Feature 3) */
+    .starmap-canvas {
+      width: 290px;
+      height: 290px;
+      border-radius: 50%;
+      background: radial-gradient(circle at center, #1b1236 0%, #070313 100%);
+      border: 2px solid rgba(255, 215, 0, 0.4);
+      box-shadow: 0 0 30px rgba(186, 85, 211, 0.3);
+      margin: 10px 0;
+    }
+
+    /* Screen 7: Polaroid Carousel */
+    .polaroid-frame {
+      background: #ffffff;
+      padding: 14px 14px 20px;
+      border-radius: 10px;
+      box-shadow: 0 20px 45px rgba(0,0,0,0.8);
+      width: 275px;
+      transform: rotate(-1.5deg);
+      transition: 0.4s ease;
+    }
+    .polaroid-frame img {
+      width: 100%;
+      height: 260px;
+      object-fit: cover;
+      border-radius: 4px;
+    }
+    .polaroid-frame p {
+      font-family: 'Sacramento', cursive;
+      font-size: 24px;
+      color: #2b1320;
+      margin-top: 8px;
+    }
+
+    /* Screen 8: Reasons Flip Cards (Feature 2) */
+    .reasons-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 140px);
+      gap: 12px;
+      perspective: 1000px;
+      margin: 15px 0;
+    }
+    .flip-card {
+      width: 140px;
+      height: 125px;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+      cursor: pointer;
+    }
+    .flip-card.flipped { transform: rotateY(180deg); }
+    .card-face {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+      text-align: center;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+    }
+    .card-front {
+      background: linear-gradient(135deg, rgba(255, 105, 180, 0.25), rgba(255, 255, 255, 0.08));
+      border: 1px solid rgba(255, 182, 193, 0.4);
+      font-size: 14px;
+      color: #ff9ec4;
+      font-weight: 600;
+    }
+    .card-back {
+      background: linear-gradient(135deg, #ff3366, #ba135d);
+      transform: rotateY(180deg);
+      font-size: 11.5px;
+      line-height: 1.4;
+      color: #ffffff;
+      font-weight: 400;
+    }
+
+    /* Screen 9: Heartbeat Thumb Touch Sync (Feature 4) */
+    .touch-sync-area {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.06);
+      border: 2px dashed #ff4e79;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: 25px 0 15px;
+      position: relative;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .touch-heart {
+      font-size: 50px;
+      transition: transform 0.2s;
+    }
+    .touch-sync-area.holding {
+      border-style: solid;
+      background: rgba(255, 51, 102, 0.25);
+      box-shadow: 0 0 35px rgba(255, 51, 102, 0.8);
+    }
+    .touch-sync-area.holding .touch-heart {
+      animation: heartBeating 0.6s infinite;
+    }
+    @keyframes heartBeating {
+      0% { transform: scale(1); }
+      30% { transform: scale(1.3); }
+      50% { transform: scale(1.1); }
+      70% { transform: scale(1.35); }
+      100% { transform: scale(1); }
+    }
+    .progress-ring {
+      font-size: 12px;
+      color: #ffd166;
+      margin-top: 6px;
+    }
+
+    /* Screen 10: Balloons */
+    .balloons-flex {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin: 20px 0;
+      width: 260px;
+    }
+    .balloon-ball {
+      font-size: 44px;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+      filter: drop-shadow(0 6px 10px rgba(255,105,180,0.3));
+    }
+    .balloon-ball:active { transform: scale(0.85); }
+
+    /* Screen 11: Puzzle */
+    .puzzle-board {
+      display: grid;
+      grid-template-columns: repeat(3, 80px);
+      grid-template-rows: repeat(3, 80px);
+      gap: 4px;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 8px;
+      border-radius: 16px;
+      margin: 15px 0;
+    }
+    .tile {
+      width: 80px;
+      height: 80px;
+      background-image: url('IMG_20260905_205301_817.jpg');
+      background-size: 240px 240px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .tile.blank {
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px dashed rgba(255, 255, 255, 0.3);
+    }
+
+    /* Screen 12: Scratch Card */
+    .scratch-wrapper {
+      position: relative;
+      width: 300px;
+      height: 160px;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+      margin: 15px 0;
+    }
+    .scratch-secret {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: linear-gradient(135deg, #ff416c, #8a2387);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+      text-align: center;
+    }
+    #scratchCanvas {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      cursor: grab;
+      z-index: 2;
+    }
+
+    /* Screen 13: Midnight Coupons (Feature 5) */
+    .coupons-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
+      max-width: 310px;
+      margin: 10px 0;
+    }
+    .coupon-card {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px dashed #ff9ab6;
+      border-radius: 14px;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      text-align: left;
+    }
+    .coupon-info h4 { font-size: 13px; color: #fff; margin-bottom: 2px; }
+    .coupon-info p { font-size: 11px; color: #d6b8c8; }
+    .btn-claim {
+      background: #ff3366;
+      border: none;
+      color: #fff;
+      font-size: 11px;
+      padding: 6px 12px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .btn-claim.claimed {
+      background: rgba(255, 255, 255, 0.2);
+      color: #ffd166;
+      cursor: default;
+    }
+
+    /* Screen 14: Letter */
+    .envelope-box {
+      font-size: 65px;
+      cursor: pointer;
+      transition: 0.3s;
+      margin: 20px 0;
+    }
+    .typewriter-letter {
+      display: none;
+      background: rgba(18, 5, 24, 0.85);
+      border-left: 3px solid #ff758c;
+      border-radius: 12px;
+      padding: 20px;
+      text-align: left;
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 14px;
+      line-height: 1.8;
+      color: #ffe6f0;
+      max-height: 360px;
+      overflow-y: auto;
+      margin: 10px 0;
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+    }
+  </style>
+</head>
+<body>
+
+  <audio id="bgSong" src="song.mp3" loop></audio>
+
+  <div class="bokeh-bg" id="bokehWrap"></div>
+
+  <div class="app-frame">
+
+    <div class="screen active" id="screen-gift">
+      <h1 class="title">A surprise awaits you... ✨</h1>
+      <p class="subtitle">Something special, just for you 💕</p>
+      
+      <div class="gift-wrapper" onclick="openGiftBox()">
+        <div class="gift-bow">🎀</div>
+        <div class="gift-lid"></div>
+        <div class="gift-box"></div>
+      </div>
+
+      <p style="font-size: 13px; color: #ffd166; margin-top: 10px;">Tap the gift to open 🎁</p>
+    </div>
+
+    <div class="screen" id="screen-lock">
+      <div class="clock-widget" id="liveClock">23:01</div>
+      <p class="subtitle" style="margin-bottom: 8px;">Birthday Surprise 💖</p>
+      
+      <div class="pin-card">
+        <div style="font-size: 26px;" id="lockIcon">🔒</div>
+        <p style="font-size: 12px; margin-top: 2px; color: #ffb6c1;">Enter secret key 💕 (Hint: 2709)</p>
+
+        <div class="pin-dots">
+          <div class="dot" id="d1"></div>
+          <div class="dot" id="d2"></div>
+          <div class="dot" id="d3"></div>
+          <div class="dot" id="d4"></div>
+        </div>
+
+        <div class="numpad-grid">
+          <button class="numpad-btn" onclick="dial(1)">1</button>
+          <button class="numpad-btn" onclick="dial(2)">2</button>
+          <button class="numpad-btn" onclick="dial(3)">3</button>
+          <button class="numpad-btn" onclick="dial(4)">4</button>
+          <button class="numpad-btn" onclick="dial(5)">5</button>
+          <button class="numpad-btn" onclick="dial(6)">6</button>
+          <button class="numpad-btn" onclick="dial(7)">7</button>
+          <button class="numpad-btn" onclick="dial(8)">8</button>
+          <button class="numpad-btn" onclick="dial(9)">9</button>
+          <button class="numpad-btn" style="font-size: 16px;" onclick="clearDial()">✕</button>
+          <button class="numpad-btn" onclick="dial(0)">0</button>
+          <button class="numpad-btn" style="font-size: 18px;" onclick="backspaceDial()">⌫</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="curtain-view" id="curtainOverlay" style="display:none;">
+      <div class="curtain-half curtain-left"></div>
+      <div class="curtain-half curtain-right"></div>
+      <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 12;">
+        <button class="btn-pill" style="font-size: 18px; padding: 14px 34px;" onclick="pullCurtains()">💖 Open</button>
+      </div>
+    </div>
+
+    <div class="screen" id="screen-loader">
+      <div style="font-size: 40px; margin-bottom: 20px; animation: floatBokeh 1s infinite alternate;">🐻</div>
+      <h1 class="title">There's something special I want to tell you...</h1>
+      <p class="subtitle">that's why I made something special for you...</p>
+      <button class="btn-pill" onclick="goToScreen('screen-cake')">Continue ✨</button>
+    </div>
+
+    <div class="screen" id="screen-cake">
+      <h1 class="title">Happy Birthday Cutiepie 🎂</h1>
+      <p class="subtitle">The World Has Been Better Since ❤️</p>
+
+      <div class="stat-counter-grid">
+        <div class="stat-tile"><h3 id="cYears">0</h3><span>YEARS</span></div>
+        <div class="stat-tile"><h3 id="cDays">0</h3><span>DAYS</span></div>
+        <div class="stat-tile"><h3 id="cHours">0</h3><span>HOURS</span></div>
+        <div class="stat-tile"><h3 id="cMins">0</h3><span>MINUTES</span></div>
+      </div>
+
+      <div class="cake-art" onclick="blowCandles()">
+        <div class="cake-top-layer"></div>
+        <div class="cake-base"></div>
+        <div class="candle candle-1">
+          1
+          <div class="candle-flame" id="flame1"></div>
+        </div>
+        <div class="candle candle-2">
+          8
+          <div class="candle-flame" id="flame2"></div>
+        </div>
+      </div>
+
+      <p id="cakeInstruction" style="font-size: 13px; color: #ffd166; margin-top: 14px;">Tap the cake to blow the candles 🌬️</p>
+      <button class="btn-pill" id="btnCakeNext" style="display:none;" onclick="goToScreen('screen-starmap')">See The Sky That Night 🌌</button>
+    </div>
+
+    <div class="screen" id="screen-starmap">
+      <h1 class="title">27th September 2008 🌌</h1>
+      <p class="subtitle">The universe got a lot brighter the day you were born ✨</p>
+      
+      <canvas class="starmap-canvas" id="starCanvas" width="290" height="290"></canvas>
+      
+      <p style="font-size: 12px; color: #d8c2e6; margin-top: 6px;">"You were written in the stars for me."</p>
+      <button class="btn-pill" onclick="goToScreen('screen-memories')">Our Cute Memories 🌸</button>
+    </div>
+
+    <div class="screen" id="screen-memories">
+      <h1 class="title">Cute Memories 💕</h1>
+      <p class="subtitle">Swipe or tap to see our journey</p>
+
+      <div class="polaroid-frame" onclick="nextPhoto()">
+        <img id="polaroidImage" src="IMG_20260905_205301_817.jpg" alt="Memory">
+        <p id="polaroidCaption">Our first sweet adventure together 🌸</p>
+      </div>
+
+      <button class="btn-pill" onclick="nextPhoto()">Next Surprise 🎁</button>
+    </div>
+
+    <div class="screen" id="screen-reasons">
+      <h1 class="title">Why I Adore You 💖</h1>
+      <p class="subtitle">Tap each card to reveal what I love about you</p>
+
+      <div class="reasons-grid">
+        <div class="flip-card" onclick="flipCard(this)">
+          <div class="card-face card-front">Reason #1 ✨</div>
+          <div class="card-face card-back">The way your eyes sparkle whenever you smile genuinely 💕</div>
+        </div>
+        <div class="flip-card" onclick="flipCard(this)">
+          <div class="card-face card-front">Reason #2 🌸</div>
+          <div class="card-face card-back">Your pure, caring heart that makes everyone around you feel safe.</div>
+        </div>
+        <div class="flip-card" onclick="flipCard(this)">
+          <div class="card-face card-front">Reason #3 🥂</div>
+          <div class="card-face card-back">How even the most boring day turns magical just talking to you.</div>
+        </div>
+        <div class="flip-card" onclick="flipCard(this)">
+          <div class="card-face card-front">Reason #4 💫</div>
+          <div class="card-face card-back">Because you are my favourite comfort place in this busy world.</div>
+        </div>
+      </div>
+
+      <button class="btn-pill" id="btnReasonsNext" style="display:none;" onclick="goToScreen('screen-touchsync')">Feel My Presence 🤍</button>
+    </div>
+
+    <div class="screen" id="screen-touchsync">
+      <h1 class="title">Heartbeat Sync 💓</h1>
+      <p class="subtitle">Place and hold your thumb on the heart</p>
+
+      <div class="touch-sync-area" id="touchSyncBox">
+        <div class="touch-heart">❤️</div>
+        <span class="progress-ring" id="touchProgress">Hold for 3s...</span>
+      </div>
+
+      <p id="touchSyncStatus" style="font-size: 12.5px; color: #ffd166; min-height: 24px;">Feel the rhythm of my love for you...</p>
+      <button class="btn-pill" id="btnTouchNext" style="display:none;" onclick="goToScreen('screen-wishes')">Pop The Wishes 🎈</button>
+    </div>
+
+    <div class="screen" id="screen-wishes">
+      <h1 class="title">Pop the Wishes 🎈</h1>
+      <p class="subtitle">Tap each balloon to reveal a wish</p>
+
+      <div class="balloons-flex">
+        <div class="balloon-ball" onclick="popBalloon(0, this)">🎈</div>
+        <div class="balloon-ball" onclick="popBalloon(1, this)">🎈</div>
+        <div class="balloon-ball" onclick="popBalloon(2, this)">🎈</div>
+        <div class="balloon-ball" onclick="popBalloon(3, this)">🎈</div>
+        <div class="balloon-ball" onclick="popBalloon(4, this)">🎈</div>
+        <div class="balloon-ball" onclick="popBalloon(5, this)">🎈</div>
+      </div>
+
+      <p id="balloonWishText" style="min-height: 48px; color: #ffd166; font-size: 13.5px; font-weight: 500;">Tap any balloon! ✨</p>
+      <button class="btn-pill" id="btnBalloonsNext" style="display:none;" onclick="goToScreen('screen-puzzle')">Solve The Surprise 🧩</button>
+    </div>
+
+    <div class="screen" id="screen-puzzle">
+      <h1 class="title">Birthday Puzzle 🎂</h1>
+      <p class="subtitle">Solve to unlock a special message ✨</p>
+
+      <div class="puzzle-board" id="puzzleBoard"></div>
+
+      <div style="display: flex; gap: 10px;">
+        <button class="btn-pill" onclick="shufflePuzzle()">🔀 Shuffle</button>
+        <button class="btn-pill" onclick="solvePuzzle()">✨ Solve it for me</button>
+      </div>
+      <button class="btn-pill" id="btnPuzzleNext" style="display:none; margin-top: 10px;" onclick="goToScreen('screen-scratch')">One Last Surprise ✨</button>
+    </div>
+
+    <div class="screen" id="screen-scratch">
+      <h1 class="title">One Last Surprise ✨</h1>
+      <p class="subtitle">Scratch the card to reveal it 🪙</p>
+
+      <div class="scratch-wrapper">
+        <div class="scratch-secret">
+          <h2 style="font-size: 20px; color: #fff;">🎉 Happy Birthday! 🎉</h2>
+          <p style="font-size: 12.5px; color: #ffd166; margin-top: 4px;">You found the hidden treasure! You mean everything to me ❤️</p>
+        </div>
+        <canvas id="scratchCanvas" width="300" height="160"></canvas>
+      </div>
+
+      <button class="btn-pill" id="btnScratchNext" style="display:none;" onclick="goToScreen('screen-coupons')">My Promises To You 🎟️</button>
+    </div>
+
+    <div class="screen" id="screen-coupons">
+      <h1 class="title">Love Coupons 🎟️</h1>
+      <p class="subtitle">Valid Forever • Redeem anytime no questions asked!</p>
+
+      <div class="coupons-list">
+        <div class="coupon-card">
+          <div class="coupon-info">
+            <h4>🍨 Late Night Ice-Cream Date</h4>
+            <p>Craving something sweet? Redeem this!</p>
+          </div>
+          <button class="btn-claim" onclick="claimCoupon(this)">Claim</button>
+        </div>
+
+        <div class="coupon-card">
+          <div class="coupon-info">
+            <h4>🏆 "You Win Any Argument"</h4>
+            <p>Show this and you automatically win.</p>
+          </div>
+          <button class="btn-claim" onclick="claimCoupon(this)">Claim</button>
+        </div>
+
+        <div class="coupon-card">
+          <div class="coupon-info">
+            <h4>🫂 Unlimited Warm Hugs</h4>
+            <p>For any day you feel even a little low.</p>
+          </div>
+          <button class="btn-claim" onclick="claimCoupon(this)">Claim</button>
+        </div>
+      </div>
+
+      <button class="btn-pill" onclick="goToScreen('screen-letter')">Read My Letter 💌</button>
+    </div>
+
+    <div class="screen" id="screen-letter">
+      <h1 class="title">A Letter Just For You</h1>
+      <p class="subtitle">Straight from my heart</p>
+
+      <div class="envelope-box" id="envelopeIcon" onclick="openLetter()">💌</div>
+      
+      <div class="typewriter-letter" id="typewriterText"></div>
+
+      <button class="btn-pill" id="btnReplay" style="display:none;" onclick="location.reload()">Replay 🔄</button>
+    </div>
+
+  </div>
+
+  <script>
+    // Music Auto-Play
+    function startMusic() {
+      const audio = document.getElementById("bgSong");
+      if (audio.paused) {
+        audio.play().catch(() => {});
+      }
+    }
+    window.addEventListener("click", startMusic, { once: true });
+    window.addEventListener("touchstart", startMusic, { once: true });
+
+    // Live Clock
+    function updateClock() {
+      const now = new Date();
+      const hrs = String(now.getHours()).padStart(2, '0');
+      const mins = String(now.getMinutes()).padStart(2, '0');
+      const clockEl = document.getElementById("liveClock");
+      if (clockEl) clockEl.innerText = `${hrs}:${mins}`;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // Background Bokeh
+    const bokehWrap = document.getElementById("bokehWrap");
+    for (let i = 0; i < 18; i++) {
+      const dot = document.createElement("div");
+      dot.className = "bokeh-dot";
+      const sz = Math.random() * 80 + 40;
+      dot.style.width = `${sz}px`;
+      dot.style.height = `${sz}px`;
+      dot.style.left = `${Math.random() * 100}%`;
+      dot.style.top = `${Math.random() * 100}%`;
+      dot.style.animationDuration = `${Math.random() * 4 + 4}s`;
+      dot.style.animationDelay = `${Math.random() * 3}s`;
+      bokehWrap.appendChild(dot);
+    }
+
+    function goToScreen(screenId) {
+      document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+      const target = document.getElementById(screenId);
+      if (target) target.classList.add("active");
+    }
+
+    // Screen 1: Gift Open
+    function openGiftBox() {
+      document.querySelector(".gift-wrapper").classList.add("opened");
+      confetti({ particleCount: 70, spread: 80, origin: { y: 0.6 } });
+      setTimeout(() => goToScreen("screen-lock"), 750);
+    }
+
+    // Screen 2: Passcode Lock
+    const CORRECT_PIN = "2709";
+    let inputPin = "";
+
+    function dial(num) {
+      if (inputPin.length < 4) {
+        inputPin += num;
+        updateDots();
+        if (inputPin.length === 4) {
+          setTimeout(verifyPin, 250);
+        }
+      }
+    }
+    function clearDial() { inputPin = ""; updateDots(); }
+    function backspaceDial() { inputPin = inputPin.slice(0, -1); updateDots(); }
+    function updateDots() {
+      for (let i = 1; i <= 4; i++) {
+        const d = document.getElementById(`d${i}`);
+        if (i <= inputPin.length) d.classList.add("filled");
+        else d.classList.remove("filled");
+      }
+    }
+    function verifyPin() {
+      if (inputPin === CORRECT_PIN) {
+        document.getElementById("lockIcon").innerText = "🔓";
+        confetti({ particleCount: 50, spread: 70 });
+        setTimeout(() => {
+          document.getElementById("curtainOverlay").style.display = "flex";
+        }, 400);
+      } else {
+        alert("Incorrect PIN! Hint: 2709");
+        clearDial();
+      }
+    }
+
+    // Screen 3: Curtains
+    function pullCurtains() {
+      const overlay = document.getElementById("curtainOverlay");
+      overlay.classList.add("curtains-open");
+      setTimeout(() => {
+        overlay.style.display = "none";
+        goToScreen("screen-loader");
+        calculateTime("2008-09-27");
+        drawStarMap();
+      }, 1050);
+    }
+
+    // Screen 5: Cake Age Counter
+    function calculateTime(bdate) {
+      const birth = new Date(bdate);
+      const now = new Date();
+      const diff = now - birth;
+
+      const mins = Math.floor(diff / (1000 * 60));
+      const hours = Math.floor(diff / (1000 * 60 * 60));
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const years = Math.floor(days / 365.25);
+
+      document.getElementById("cYears").innerText = years;
+      document.getElementById("cDays").innerText = days.toLocaleString();
+      document.getElementById("cHours").innerText = hours.toLocaleString();
+      document.getElementById("cMins").innerText = mins.toLocaleString();
+    }
+
+    function blowCandles() {
+      document.getElementById("flame1").style.display = "none";
+      document.getElementById("flame2").style.display = "none";
+      document.getElementById("cakeInstruction").innerText = "Candles blown! Wishes sent to the universe ✨";
+      confetti({ particleCount: 80, spread: 90, origin: { y: 0.7 } });
+      document.getElementById("btnCakeNext").style.display = "inline-flex";
+    }
+
+    // Screen 6: Dynamic Star Map Generator
+    function drawStarMap() {
+      const cvs = document.getElementById("starCanvas");
+      const ctx = cvs.getContext("2d");
+      ctx.clearRect(0, 0, cvs.width, cvs.height);
+
+      // Stars
+      for (let i = 0; i < 110; i++) {
+        const x = Math.random() * cvs.width;
+        const y = Math.random() * cvs.height;
+        const rad = Math.random() * 1.5;
+        ctx.fillStyle = `rgba(255, 255, 255, ${Math.random() * 0.8 + 0.2})`;
+        ctx.beginPath();
+        ctx.arc(x, y, rad, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // Constellation Lines
+      ctx.strokeStyle = "rgba(255, 215, 0, 0.4)";
+      ctx.lineWidth = 1;
+      const pts = [
+        {x: 60, y: 80}, {x: 120, y: 100}, {x: 150, y: 150},
+        {x: 210, y: 120}, {x: 230, y: 190}, {x: 160, y: 220}
+      ];
+      ctx.beginPath();
+      ctx.moveTo(pts[0].x, pts[0].y);
+      pts.forEach(p => {
+        ctx.lineTo(p.x, p.y);
+        ctx.arc(p.x, p.y, 2.5, 0, Math.PI * 2);
+      });
+      ctx.stroke();
+
+      // Moon
+      ctx.fillStyle = "rgba(255, 240, 200, 0.9)";
+      ctx.beginPath();
+      ctx.arc(230, 60, 16, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // Screen 7: Polaroid
+    const photos = [
+      { url: "IMG_20260905_205301_817.jpg", caption: "Our first sweet adventure together 🌸" },
+      { url: "IMG_20260905_223215_019.jpg", caption: "Making every moment magical ✨" },
+      { url: "IMG_20260905_225000_569.jpg", caption: "To endless beautiful memories ahead 🥂" }
+    ];
+    let photoIndex = 0;
+
+    function nextPhoto() {
+      photoIndex++;
+      if (photoIndex < photos.length) {
+        document.getElementById("polaroidImage").src = photos[photoIndex].url;
+        document.getElementById("polaroidCaption").innerText = photos[photoIndex].caption;
+      } else {
+        goToScreen("screen-reasons");
+      }
+    }
+
+    // Screen 8: Reasons Cards
+    let flippedCount = 0;
+    function flipCard(card) {
+      if (!card.classList.contains("flipped")) {
+        card.classList.add("flipped");
+        flippedCount++;
+        confetti({ particleCount: 20, spread: 40 });
+        if (flippedCount >= 3) {
+          document.getElementById("btnReasonsNext").style.display = "inline-flex";
+        }
+      }
+    }
+
+    // Screen 9: Heartbeat Thumb Hold Sync
+    const touchBox = document.getElementById("touchSyncBox");
+    let holdTimer = null;
+    let holdSeconds = 0;
+
+    function startHold() {
+      touchBox.classList.add("holding");
+      holdSeconds = 0;
+      if (navigator.vibrate) navigator.vibrate([100, 100, 100]);
+      
+      holdTimer = setInterval(() => {
+        holdSeconds += 0.5;
+        if (navigator.vibrate) navigator.vibrate(60);
+        document.getElementById("touchProgress").innerText = `Syncing: ${Math.round((holdSeconds/3)*100)}%`;
+        
+        if (holdSeconds >= 3) {
+          clearInterval(holdTimer);
+          document.getElementById("touchSyncStatus").innerText = "Connection Complete! Heartbeats synced forever ❤️";
+          document.getElementById("touchProgress").innerText = "Synced! ✨";
+          confetti({ particleCount: 70, spread: 80 });
+          document.getElementById("btnTouchNext").style.display = "inline-flex";
+        }
+      }, 500);
+    }
+
+    function cancelHold() {
+      touchBox.classList.remove("holding");
+      if (holdSeconds < 3) {
+        clearInterval(holdTimer);
+        document.getElementById("touchProgress").innerText = "Hold for 3s...";
+      }
+    }
+
+    touchBox.addEventListener("mousedown", startHold);
+    touchBox.addEventListener("mouseup", cancelHold);
+    touchBox.addEventListener("touchstart", (e) => { e.preventDefault(); startHold(); });
+    touchBox.addEventListener("touchend", cancelHold);
+
+    // Screen 10: Balloons
+    const wishes = [
+      "You make my entire world brighter ☀️",
+      "You are my absolute favorite person 💕",
+      "May all your dreams turn into reality ✨",
+      "I am the luckiest because of you 🌸",
+      "Endless happiness and peace to you 🥂",
+      "You deserve the entire universe 🌌"
+    ];
+    let poppedCount = 0;
+
+    function popBalloon(idx, el) {
+      if (el.innerText !== "💥") {
+        el.innerText = "💥";
+        document.getElementById("balloonWishText").innerText = wishes[idx];
+        confetti({ particleCount: 35, spread: 50 });
+        poppedCount++;
+        if (poppedCount >= 4) {
+          document.getElementById("btnBalloonsNext").style.display = "inline-flex";
+        }
+      }
+    }
+
+    // Screen 11: 3x3 Puzzle
+    const pBoard = document.getElementById("puzzleBoard");
+    function buildBoard() {
+      pBoard.innerHTML = "";
+      for (let i = 0; i < 9; i++) {
+        const tile = document.createElement("div");
+        tile.className = "tile";
+        const x = (i % 3) * -80;
+        const y = Math.floor(i / 3) * -80;
+        tile.style.backgroundPosition = `${x}px ${y}px`;
+        if (i === 8) tile.classList.add("blank");
+        pBoard.appendChild(tile);
+      }
+    }
+    buildBoard();
+
+    function shufflePuzzle() {
+      const tiles = Array.from(document.querySelectorAll(".tile"));
+      tiles.sort(() => Math.random() - 0.5);
+      pBoard.innerHTML = "";
+      tiles.forEach(t => pBoard.appendChild(t));
+    }
+
+    function solvePuzzle() {
+      buildBoard();
+      document.querySelector(".tile.blank").classList.remove("blank");
+      confetti({ particleCount: 60, spread: 80 });
+      document.getElementById("btnPuzzleNext").style.display = "inline-flex";
+    }
+
+    // Screen 12: Scratch Card
+    const canvas = document.getElementById("scratchCanvas");
+    const ctx = canvas.getContext("2d");
+    ctx.fillStyle = "#a88d9b";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "#ffffff";
+    ctx.font = "bold 15px Poppins";
+    ctx.textAlign = "center";
+    ctx.fillText("Scratch with your finger 🪙", 150, 85);
+
+    let isScratching = false;
+    function scratch(e) {
+      if (!isScratching) return;
+      const rect = canvas.getBoundingClientRect();
+      const x = (e.clientX || (e.touches && e.touches[0].clientX)) - rect.left;
+      const y = (e.clientY || (e.touches && e.touches[0].clientY)) - rect.top;
+      
+      ctx.globalCompositeOperation = "destination-out";
+      ctx.beginPath();
+      ctx.arc(x, y, 20, 0, Math.PI * 2);
+      ctx.fill();
+
+      document.getElementById("btnScratchNext").style.display = "inline-flex";
+    }
+
+    canvas.addEventListener("mousedown", () => isScratching = true);
+    canvas.addEventListener("mouseup", () => isScratching = false);
+    canvas.addEventListener("mousemove", scratch);
+    canvas.addEventListener("touchstart", () => isScratching = true);
+    canvas.addEventListener("touchend", () => isScratching = false);
+    canvas.addEventListener("touchmove", scratch);
+
+    // Screen 13: Coupons Claim
+    function claimCoupon(btn) {
+      btn.innerText = "Claimed! 💕";
+      btn.classList.add("claimed");
+      confetti({ particleCount: 30, spread: 50 });
+    }
+
+    // Screen 14: Typewriter Letter
+    const letterContent = `My dearest,\n\nOn this very special day, I want you to know how deeply loved you are. Every single moment I spend with you feels like a beautiful dream I never want to wake up from.\n\nYou make every ordinary day feel extraordinary. Your smile is my favourite thing in the entire world, and your laugh — oh, your laugh — is the most beautiful sound I have ever heard.\n\nThank you for being you. Thank you for choosing me, every single day. I promise to always be there, to hold your hand through every storm, and to celebrate every little joy with you.\n\nHappy 18th Birthday, my love. You deserve every good thing the universe has to offer.\n\nForever yours with all my heart ❤️`;
+
+    function openLetter() {
+      document.getElementById("envelopeIcon").style.display = "none";
+      const letterBox = document.getElementById("typewriterText");
+      letterBox.style.display = "block";
+      
+      let charIdx = 0;
+      function typeChar() {
+        if (charIdx < letterContent.length) {
+          const char = letterContent.charAt(charIdx);
+          letterBox.innerHTML += (char === '\n') ? '<br/>' : char;
+          charIdx++;
+          setTimeout(typeChar, 38);
+        } else {
+          document.getElementById("btnReplay").style.display = "inline-flex";
+          confetti({ particleCount: 100, spread: 100, origin: { y: 0.5 } });
+        }
+      }
+      typeChar();
+    }
+  </script>
+</body>
+</html>
