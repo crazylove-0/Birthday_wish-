@@ -3,15 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>A Celestial Surprise... ✨</title>
+  <title>A surprise awaits you... ✨</title>
   
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@1,500;1,700&family=Sacramento&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
   <style>
     :root {
-      --romantic-glow: rgba(255, 30, 110, 0.55);
-      --crystal-border: rgba(255, 200, 230, 0.4);
+      --bg-dark: #090817;
+      --gold-primary: #e6ca65;
+      --pink-gift: #e82676;
+      --glass-panel: rgba(255, 255, 255, 0.05);
+      --glass-border: rgba(255, 255, 255, 0.12);
     }
 
     * {
@@ -24,7 +27,7 @@
     }
 
     body {
-      background: radial-gradient(circle at 50% 15%, #380727 0%, #170216 45%, #070008 100%);
+      background: radial-gradient(circle at 50% 30%, #15112c 0%, #090817 65%, #04030a 100%);
       color: #fff;
       min-height: 100vh;
       display: flex;
@@ -33,6 +36,7 @@
       overflow: hidden;
     }
 
+    /* Ambient Cinematic Bokeh Dots */
     #ambientSkyCanvas {
       position: fixed;
       inset: 0;
@@ -40,23 +44,6 @@
       height: 100vh;
       pointer-events: none;
       z-index: 1;
-    }
-
-    .aurora-mesh {
-      position: fixed;
-      width: 650px;
-      height: 650px;
-      background: radial-gradient(circle, rgba(255, 20, 120, 0.3) 0%, rgba(140, 20, 220, 0.22) 50%, transparent 70%);
-      filter: blur(85px);
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 2;
-      animation: auroraFlow 14s ease-in-out infinite alternate;
-    }
-    @keyframes auroraFlow {
-      0% { transform: translate(-25%, -25%) scale(0.9); }
-      50% { transform: translate(20%, 15%) scale(1.2); }
-      100% { transform: translate(-10%, 25%) scale(1); }
     }
 
     .viewport {
@@ -70,7 +57,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 16px 14px;
+      padding: 18px;
     }
 
     .screen {
@@ -82,160 +69,169 @@
       justify-content: center;
       text-align: center;
       opacity: 0;
-      transform: translateY(10px) scale(0.97);
-      transition: opacity 0.35s ease, transform 0.35s ease;
+      transform: scale(0.97);
+      transition: opacity 0.4s ease, transform 0.4s ease;
     }
     .screen.active {
       display: flex;
       opacity: 1;
-      transform: translateY(0) scale(1);
+      transform: scale(1);
     }
 
-    .floating-element {
-      animation: crystalHover 4.5s ease-in-out infinite alternate;
-    }
-    @keyframes crystalHover {
-      0% { transform: translateY(0); }
-      50% { transform: translateY(-7px); }
-      100% { transform: translateY(4px); }
-    }
-
-    .screen-cat {
-      width: 72px;
-      height: 72px;
-      object-fit: contain;
-      filter: drop-shadow(0 8px 16px rgba(255, 20, 120, 0.45));
-      margin-bottom: 6px;
-    }
-
-    h1.title {
-      font-size: 23px;
+    /* Titles & Subtitles (Matches Screenshot 1 & 3) */
+    h1.hero-title {
+      font-size: 26px;
       font-weight: 700;
-      margin-bottom: 3px;
-      background: linear-gradient(135deg, #ffffff 20%, #ff6aa8 70%, #ffccd8 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      letter-spacing: -0.3px;
+      color: #d8d4ff;
+      letter-spacing: -0.2px;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
     }
-    p.subtitle {
-      font-size: 12px;
-      color: #e9b5db;
-      margin-bottom: 14px;
-      font-weight: 300;
+    p.hero-subtitle {
+      font-size: 13px;
+      color: #d1b89d;
+      margin-bottom: 24px;
+      font-weight: 400;
     }
 
-    .btn-liquid {
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 40, 130, 0.35));
-      border: 1px solid var(--crystal-border);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      color: #fff;
-      padding: 11px 28px;
-      border-radius: 40px;
-      font-size: 13.5px;
+    /* Minimalist Golden Rim Button (Screenshot 3 exact style) */
+    .btn-gold-rim {
+      background: rgba(18, 15, 32, 0.7);
+      border: 1.5px solid #ab8e53;
+      color: #f7e6c4;
+      padding: 12px 36px;
+      border-radius: 30px;
+      font-size: 14.5px;
       font-weight: 600;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      margin-top: 12px;
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6), inset 0 0 16px rgba(255, 105, 180, 0.35);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5), inset 0 0 10px rgba(171, 142, 83, 0.2);
+      transition: all 0.25s ease;
+      margin-top: 20px;
     }
-    .btn-liquid:active {
-      transform: scale(0.93);
+    .btn-gold-rim:active {
+      transform: scale(0.94);
+      border-color: #ffd700;
     }
 
-    /* Straight Realistic 3D Gift Box */
-    .gift-stage {
-      width: 180px;
-      height: 180px;
+    /* SCREEN 1: Exact 3D Gift Box (Screenshot 1 Clone) */
+    .gift-container {
       position: relative;
-      margin: 8px auto 16px;
+      width: 220px;
+      height: 220px;
+      margin: 20px auto 30px;
       cursor: pointer;
     }
-    .gift-body {
-      width: 150px;
-      height: 120px;
-      background: linear-gradient(135deg, #ff0f68, #8a0038);
-      border-radius: 14px;
+    .gift-3d-wrap {
+      position: relative;
+      width: 170px;
+      height: 155px;
+      margin: 40px auto 0;
+      transform-style: preserve-3d;
+      transform: perspective(700px) rotateX(12deg) rotateY(-18deg);
+      transition: transform 0.4s ease;
+    }
+    .gift-container:hover .gift-3d-wrap {
+      transform: perspective(700px) rotateX(6deg) rotateY(-10deg) scale(1.04);
+    }
+    .gift-box-base {
       position: absolute;
       bottom: 0;
-      left: 15px;
-      box-shadow: 0 20px 45px rgba(255, 15, 104, 0.5);
+      width: 170px;
+      height: 135px;
+      background: linear-gradient(135deg, #e61d72 0%, #b80d54 100%);
+      border-radius: 12px;
+      box-shadow: -15px 25px 40px rgba(0, 0, 0, 0.6), 0 0 35px rgba(230, 29, 114, 0.35);
     }
-    .gift-body::before {
+    .gift-box-base::before {
       content: '';
       position: absolute;
-      left: 60px;
+      left: 70px;
       top: 0;
-      width: 30px;
+      width: 28px;
       height: 100%;
-      background: linear-gradient(to right, #ffe066, #ff9900);
-      box-shadow: 0 0 16px rgba(255, 215, 0, 0.6);
+      background: linear-gradient(to right, #ffd700, #ffb300);
+      box-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
     }
-    .gift-lid {
-      width: 164px;
+    .gift-box-lid {
+      position: absolute;
+      top: 10px;
+      left: -8px;
+      width: 186px;
       height: 40px;
-      background: linear-gradient(135deg, #ff2e7e, #a80045);
+      background: linear-gradient(135deg, #ff2a82, #cc0e5c);
       border-radius: 10px;
-      position: absolute;
-      top: 25px;
-      left: 8px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.45);
       z-index: 4;
-      box-shadow: 0 8px 22px rgba(0,0,0,0.4);
-      transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55), opacity 0.5s;
+      transition: transform 0.65s cubic-bezier(0.68, -0.55, 0.265, 1.55), opacity 0.5s;
     }
-    .gift-lid::before {
+    .gift-box-lid::before {
       content: '';
       position: absolute;
-      left: 67px;
+      left: 78px;
       top: 0;
-      width: 30px;
+      width: 28px;
       height: 100%;
-      background: linear-gradient(to right, #ffe066, #ff9900);
+      background: linear-gradient(to right, #ffd700, #ffb300);
     }
-    .gift-ribbon-bow {
+    /* 3 Golden Spheres (Screenshot 1 match) */
+    .gift-gold-spheres {
       position: absolute;
       top: -24px;
       left: 50%;
       transform: translateX(-50%);
-      font-size: 36px;
-      filter: drop-shadow(0 4px 12px rgba(255, 215, 0, 0.8));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 5;
     }
-    .gift-stage.opened .gift-lid {
-      transform: translateY(-90px) scale(0.9);
+    .sphere {
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #fff7c2 0%, #e6b800 45%, #8a6500 100%);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5), 0 0 12px rgba(255, 215, 0, 0.6);
+    }
+    .sphere-large { width: 34px; height: 34px; z-index: 2; margin: 0 -4px; }
+    .sphere-small { width: 26px; height: 26px; z-index: 1; }
+
+    .gift-container.opened .gift-box-lid {
+      transform: translateY(-90px) rotateX(30deg) scale(0.85);
       opacity: 0;
     }
 
-    /* Screen 2: Glass Lock Screen */
+    /* SCREEN 2: Lock Screen */
     .clock-widget {
-      font-size: 46px;
+      font-size: 52px;
       font-weight: 700;
       letter-spacing: 2px;
+      color: #fff;
       margin-bottom: 2px;
-      text-shadow: 0 0 25px rgba(255, 105, 180, 0.5);
+      text-shadow: 0 0 25px rgba(255, 255, 255, 0.35);
     }
     .keypad-glass {
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      backdrop-filter: blur(28px);
-      -webkit-backdrop-filter: blur(28px);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
       border-radius: 28px;
-      padding: 16px 14px;
+      padding: 18px 16px;
       width: 100%;
-      max-width: 300px;
-      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.65), inset 0 0 15px rgba(255, 50, 130, 0.2);
+      max-width: 310px;
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.7);
     }
     .pin-dots {
       display: flex;
       justify-content: center;
-      gap: 14px;
-      margin: 10px 0 14px;
+      gap: 15px;
+      margin: 12px 0 16px;
     }
     .pin-dot {
-      width: 12px;
-      height: 12px;
+      width: 13px;
+      height: 13px;
       border-radius: 50%;
       border: 2px solid #ff758c;
       transition: all 0.2s;
@@ -249,15 +245,15 @@
     .key-matrix {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 9px;
+      gap: 10px;
     }
     .dial-btn {
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.14);
-      width: 58px;
-      height: 58px;
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      width: 60px;
+      height: 60px;
       border-radius: 50%;
-      font-size: 20px;
+      font-size: 21px;
       font-weight: 600;
       color: #fff;
       display: flex;
@@ -267,11 +263,11 @@
       cursor: pointer;
     }
     .dial-btn:active {
-      background: rgba(255, 20, 100, 0.45);
+      background: rgba(230, 29, 114, 0.4);
       transform: scale(0.9);
     }
 
-    /* Curtains Screen */
+    /* SCREEN 3: Curtains Screen */
     .curtain-screen {
       position: fixed;
       inset: 0;
@@ -298,60 +294,110 @@
       cursor: pointer;
     }
 
-    /* Screen 5: Cake & Live Counter */
+    /* SCREEN 4: Minimalist Loading Screen (Screenshot 2 Clone) */
+    .pulse-dots-wrap {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .pulse-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #7c76b4;
+      animation: pulseBlink 1.4s infinite ease-in-out both;
+    }
+    .pulse-dot:nth-child(1) { animation-delay: -0.32s; }
+    .pulse-dot:nth-child(2) { animation-delay: -0.16s; }
+    @keyframes pulseBlink {
+      0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+      40% { transform: scale(1.2); opacity: 1; background: #a29bfe; box-shadow: 0 0 12px #a29bfe; }
+    }
+    .loading-title {
+      font-size: 16px;
+      color: #dfbc77;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+    }
+
+    /* SCREEN 5: Bear Screen (Screenshot 3 Clone) */
+    .bear-badge {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      background: #120e24;
+      border: 2px solid #b38b4d;
+      box-shadow: 0 0 25px rgba(179, 139, 77, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 44px;
+      margin: 0 auto 28px;
+    }
+    .bear-screen-title {
+      font-size: 26px;
+      font-weight: 700;
+      color: #c9c4ff;
+      line-height: 1.35;
+      margin-bottom: 12px;
+    }
+    .bear-screen-sub {
+      font-size: 13.5px;
+      color: #ccab78;
+      margin-bottom: 25px;
+    }
+
+    /* SCREEN 6: Cake & Counter */
     .counter-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 9px;
+      gap: 10px;
       width: 100%;
-      margin: 8px 0;
+      margin: 10px 0;
     }
     .counter-box {
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.14);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
       border-radius: 16px;
-      padding: 8px 4px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      padding: 10px 4px;
     }
-    .counter-box h3 {
-      font-size: 21px;
-      color: #ff8cb6;
-      font-weight: 700;
-    }
-    .counter-box span { font-size: 10px; color: #d6b4cc; }
+    .counter-box h3 { font-size: 22px; color: #ff8cb6; font-weight: 700; }
+    .counter-box span { font-size: 10px; color: #d6b4cc; letter-spacing: 0.8px; }
 
     .cake-showcase {
       position: relative;
-      width: 200px;
-      height: 125px;
-      margin: 10px auto 6px;
+      width: 210px;
+      height: 135px;
+      margin: 14px auto 8px;
       cursor: pointer;
     }
     .cake-base {
       position: absolute;
       bottom: 0;
-      width: 200px;
-      height: 52px;
+      width: 210px;
+      height: 58px;
       background: linear-gradient(180deg, #ffd0e0, #f7a8c4);
-      border-radius: 16px 16px 20px 20px;
-      box-shadow: 0 12px 30px rgba(0,0,0,0.55);
+      border-radius: 16px 16px 22px 22px;
+      box-shadow: 0 14px 35px rgba(0,0,0,0.55);
     }
     .cake-top {
       position: absolute;
-      bottom: 44px;
+      bottom: 48px;
       left: 25px;
-      width: 150px;
-      height: 45px;
+      width: 160px;
+      height: 48px;
       background: linear-gradient(180deg, #fff0f5, #ffd9e8);
       border-radius: 12px 12px 0 0;
     }
     .candle {
       position: absolute;
-      bottom: 84px;
+      bottom: 92px;
       width: 22px;
-      height: 35px;
+      height: 36px;
       background: #ffffff;
-      border-radius: 7px;
+      border-radius: 8px;
       border: 2px solid #ffb6c1;
       display: flex;
       align-items: center;
@@ -360,8 +406,8 @@
       color: #ff1a75;
       font-size: 15px;
     }
-    .candle-1 { left: 66px; }
-    .candle-2 { left: 112px; }
+    .candle-1 { left: 68px; }
+    .candle-2 { left: 116px; }
     .flame {
       position: absolute;
       top: -18px;
@@ -374,52 +420,44 @@
     }
     @keyframes flameMotion {
       from { transform: scale(0.95) rotate(-3deg); }
-      to { transform: scale(1.15) rotate(4deg); }
+      to { transform: scale(1.18) rotate(4deg); }
     }
 
-    /* Screen 6: Moon & Love You Always Star Constellation */
+    /* SCREEN 7: Star Map */
     .starmap-stage {
       position: relative;
       width: 275px;
       height: 275px;
-      margin: 6px 0;
+      margin: 8px 0;
     }
     #interactiveStarMap {
       width: 100%;
       height: 100%;
       border-radius: 50%;
-      background: radial-gradient(circle at center, #240c42 0%, #090217 100%);
+      background: radial-gradient(circle at center, #1b0f34 0%, #080213 100%);
       border: 2px solid rgba(255, 215, 0, 0.55);
       box-shadow: 0 0 45px rgba(255, 20, 140, 0.4);
     }
 
-    /* Screen 7: Crystal Glass Photo Frame with Face Focus */
+    /* SCREEN 8: Crystal Polaroid Photo Frame (Face Focused) */
     .crystal-photo-frame {
       position: relative;
-      background: rgba(255, 255, 255, 0.12);
-      border: 2px solid rgba(255, 220, 240, 0.6);
+      background: rgba(255, 255, 255, 0.1);
+      border: 2px solid rgba(255, 220, 240, 0.5);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       padding: 12px 12px 16px;
       border-radius: 20px;
-      box-shadow: 0 25px 60px rgba(0,0,0,0.85), inset 0 0 20px rgba(255, 255, 255, 0.35);
+      box-shadow: 0 25px 60px rgba(0,0,0,0.85);
       width: 285px;
       cursor: pointer;
       transition: transform 0.25s ease;
-    }
-    .crystal-photo-frame::after {
-      content: '';
-      position: absolute;
-      top: 0; left: -50%; width: 200%; height: 100%;
-      background: linear-gradient(60deg, transparent, rgba(255,255,255,0.25), transparent);
-      transform: rotate(25deg);
-      pointer-events: none;
     }
     .crystal-photo-frame img {
       width: 100%;
       height: 265px;
       object-fit: cover;
-      object-position: center 20%; /* Centers face properly */
+      object-position: center 20%;
       border-radius: 12px;
       display: block;
     }
@@ -428,10 +466,9 @@
       font-size: 24px;
       color: #ffe6f2;
       margin-top: 8px;
-      text-shadow: 0 0 10px rgba(255, 105, 180, 0.6);
     }
 
-    /* Screen 8: 3D Reasons Flip Cards */
+    /* SCREEN 9: Flip Reasons */
     .reasons-container {
       display: grid;
       grid-template-columns: repeat(2, 135px);
@@ -462,8 +499,8 @@
       box-shadow: 0 10px 25px rgba(0,0,0,0.5);
     }
     .card-front {
-      background: linear-gradient(135deg, rgba(255, 50, 130, 0.3), rgba(255, 255, 255, 0.1));
-      border: 1px solid rgba(255, 182, 193, 0.45);
+      background: linear-gradient(135deg, rgba(255, 50, 130, 0.25), rgba(255, 255, 255, 0.08));
+      border: 1px solid rgba(255, 182, 193, 0.4);
       font-size: 13.5px;
       color: #ff9ec4;
       font-weight: 600;
@@ -476,7 +513,7 @@
       color: #fff;
     }
 
-    /* Screen 9: Heartbeat Touch Sync */
+    /* SCREEN 10: Heartbeat Sync */
     .touch-sync-orb {
       width: 135px;
       height: 135px;
@@ -487,7 +524,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      margin: 10px 0 6px;
+      margin: 12px 0 8px;
       cursor: pointer;
       transition: all 0.3s;
     }
@@ -507,7 +544,7 @@
       100% { transform: scale(1); }
     }
 
-    /* Screen 10: Balloons */
+    /* SCREEN 11: Balloons */
     .balloons-flex {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -522,7 +559,7 @@
     }
     .balloon-item:active { transform: scale(0.8); }
 
-    /* Screen 11: Real Playable Sliding Puzzle with Face */
+    /* SCREEN 12: Playable Puzzle */
     .puzzle-board {
       display: grid;
       grid-template-columns: repeat(3, 80px);
@@ -532,7 +569,6 @@
       padding: 6px;
       border-radius: 18px;
       margin: 8px 0;
-      border: 1px solid rgba(255, 255, 255, 0.2);
     }
     .tile {
       width: 80px;
@@ -541,14 +577,13 @@
       background-size: 240px 240px;
       border-radius: 8px;
       cursor: pointer;
-      transition: transform 0.18s ease;
     }
     .tile.blank {
       background: rgba(10, 0, 15, 0.65) !important;
       border: 1px dashed rgba(255, 255, 255, 0.25);
     }
 
-    /* Screen 12: Scratch Card */
+    /* SCREEN 13: Scratch Card */
     .scratch-wrapper {
       position: relative;
       width: 290px;
@@ -576,7 +611,7 @@
       z-index: 2;
     }
 
-    /* Screen 13: Coupons */
+    /* SCREEN 14: Love Coupons */
     .coupons-list {
       display: flex;
       flex-direction: column;
@@ -612,7 +647,7 @@
       color: #ffd166;
     }
 
-    /* Screen 14: Lined Secret Notebook */
+    /* SCREEN 15: Lined Notebook */
     .diary-scene {
       width: 310px;
       height: 380px;
@@ -640,7 +675,6 @@
       position: absolute;
       left: 28px;
     }
-    
     .diary-open-view {
       display: none;
       width: 100%;
@@ -660,6 +694,26 @@
       overflow-y: auto;
       box-shadow: inset 0 0 25px rgba(0,0,0,0.12), 0 15px 40px rgba(0,0,0,0.7);
     }
+
+    /* Floating Bottom-Right Music Button */
+    .music-floating-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: rgba(20, 16, 38, 0.85);
+      border: 1px solid #ab8e53;
+      color: #f7e6c4;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      z-index: 100;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    }
   </style>
 </head>
 <body>
@@ -667,39 +721,47 @@
   <audio id="bgSong" src="song.mp3" loop preload="auto"></audio>
 
   <canvas id="ambientSkyCanvas"></canvas>
-  <div class="aurora-mesh"></div>
 
+  <div class="music-floating-btn" onclick="toggleMusic()">🎵</div>
+
+  <!-- Royal Curtains -->
   <div class="curtain-screen" id="curtainOverlay" style="display:none;">
     <div class="curtain-wing left-wing"></div>
     <div class="curtain-wing right-wing"></div>
     <div class="curtain-trigger">
-      <button class="btn-liquid" style="font-size: 16px; padding: 14px 34px;" onclick="pullCurtains()">💖 Open Curtains</button>
+      <button class="btn-gold-rim" onclick="pullCurtains()">💖 Open Curtains</button>
     </div>
   </div>
 
   <div class="viewport">
 
+    <!-- SCREEN 1: 3D Gift Box with Golden Spheres (Screenshot 1 Exact Clone) -->
     <div class="screen active" id="screen-gift">
-      <img class="screen-cat" src="https://media.tenor.com/79S-x_z2m8gAAAAi/cute-cat.gif" alt="Cat Wave" />
-      <h1 class="title">A surprise awaits you... ✨</h1>
-      <p class="subtitle">Something special, just for you 💕</p>
+      <h1 class="hero-title">A surprise awaits you . . . 🌟</h1>
+      <p class="hero-subtitle">✨ Something special, just for you ✨</p>
       
-      <div class="gift-stage floating-element" onclick="openGiftBox()">
-        <div class="gift-lid">
-          <div class="gift-ribbon-bow">🎀</div>
+      <div class="gift-container" onclick="openGiftBox()">
+        <div class="gift-3d-wrap">
+          <div class="gift-box-lid">
+            <div class="gift-gold-spheres">
+              <div class="sphere sphere-small"></div>
+              <div class="sphere sphere-large"></div>
+              <div class="sphere sphere-small"></div>
+            </div>
+          </div>
+          <div class="gift-box-base"></div>
         </div>
-        <div class="gift-body"></div>
       </div>
 
-      <p style="font-size: 12.5px; color: #ffd166;">Tap the gift box to open 🎁</p>
+      <p style="font-size: 13.5px; color: #ffab40; font-weight: 500;">Tap the gift to open 🎁</p>
     </div>
 
+    <!-- SCREEN 2: Passcode Lock Screen -->
     <div class="screen" id="screen-lock">
-      <img class="screen-cat" src="https://media.tenor.com/J3q9aBqMv-UAAAAi/cat-detective.gif" alt="Detective Cat" />
       <div class="clock-widget" id="liveClock">23:01</div>
-      <p class="subtitle" style="margin-bottom: 6px;">Birthday Surprise 💖</p>
+      <p class="hero-subtitle" style="margin-bottom: 6px; color: #ffb6c1;">Birthday Surprise 💖</p>
       
-      <div class="keypad-glass floating-element">
+      <div class="keypad-glass">
         <div style="font-size: 22px;" id="lockIcon">🔒</div>
         <p style="font-size: 11px; margin-top: 2px; color: #ffb6c1;">Enter secret code 💕 (Hint: 2709)</p>
 
@@ -727,17 +789,28 @@
       </div>
     </div>
 
-    <div class="screen" id="screen-loader">
-      <img class="screen-cat" src="https://media.tenor.com/2RoaM1Kk6HMAAAAi/peach-goma.gif" alt="Excited Cat" />
-      <h1 class="title">There's something special I want to tell you...</h1>
-      <p class="subtitle">that's why I made something special for you...</p>
-      <button class="btn-liquid" onclick="goToScreen('screen-cake')">Continue ✨</button>
+    <!-- SCREEN 3: Minimalist Loading Screen (Screenshot 2 Exact Clone) -->
+    <div class="screen" id="screen-loader-dots">
+      <div class="pulse-dots-wrap">
+        <div class="pulse-dot"></div>
+        <div class="pulse-dot"></div>
+        <div class="pulse-dot"></div>
+      </div>
+      <div class="loading-title">Loading something special...</div>
     </div>
 
+    <!-- SCREEN 4: Bear Screen (Screenshot 3 Exact Clone) -->
+    <div class="screen" id="screen-bear-reveal">
+      <div class="bear-badge">🐻</div>
+      <h1 class="bear-screen-title">There's something special<br>I want to tell you...</h1>
+      <p class="bear-screen-sub">that's why I made something special for you...</p>
+      <button class="btn-gold-rim" onclick="goToScreen('screen-cake')">Continue ✨</button>
+    </div>
+
+    <!-- SCREEN 5: Birthday Cake & Exact 2008 Milestone Stats -->
     <div class="screen" id="screen-cake">
-      <img class="screen-cat" src="https://media.tenor.com/8QO-i97T_QIAAAAi/happy-birthday.gif" alt="Birthday Cat" />
-      <h1 class="title">Happy Birthday Cutiepie 🎂</h1>
-      <p class="subtitle">The World Has Been Sweeter Since 2008 ❤️</p>
+      <h1 class="hero-title">Happy Birthday Cutiepie 🎂</h1>
+      <p class="hero-subtitle">The World Has Been Sweeter Since 2008 ❤️</p>
 
       <div class="counter-grid">
         <div class="counter-box"><h3 id="cYears">0</h3><span>YEARS</span></div>
@@ -746,7 +819,7 @@
         <div class="counter-box"><h3 id="cMins">0</h3><span>MINUTES</span></div>
       </div>
 
-      <div class="cake-showcase floating-element" onclick="blowCandles()">
+      <div class="cake-showcase" onclick="blowCandles()">
         <div class="cake-top"></div>
         <div class="cake-base"></div>
         <div class="candle candle-1">1<div class="flame" id="flame1"></div></div>
@@ -754,39 +827,39 @@
       </div>
 
       <p id="cakeInstruction" style="font-size: 12px; color: #ffd166; margin-top: 8px;">Tap the cake to blow the candles 🌬️</p>
-      <button class="btn-liquid" id="btnCakeNext" style="display:none;" onclick="goToScreen('screen-starmap')">See The Sky That Night 🌌</button>
+      <button class="btn-gold-rim" id="btnCakeNext" style="display:none;" onclick="goToScreen('screen-starmap')">See The Sky That Night 🌌</button>
     </div>
 
+    <!-- SCREEN 6: Moon & Love You Always Star Constellation -->
     <div class="screen" id="screen-starmap">
-      <img class="screen-cat" src="https://media.tenor.com/Z6jW-3B0mNIAAAAi/cat-cute.gif" alt="Dreamy Cat" />
-      <h1 class="title">27th September 2008 🌌</h1>
-      <p class="subtitle">Look closely at the stars connecting just for you ✨</p>
+      <h1 class="hero-title">27th September 2008 🌌</h1>
+      <p class="hero-subtitle">Look closely at the stars connecting just for you ✨</p>
       
-      <div class="starmap-stage floating-element">
+      <div class="starmap-stage">
         <canvas id="interactiveStarMap" width="275" height="275"></canvas>
       </div>
       
       <p style="font-size: 11.5px; color: #ffd1dc; margin-top: 4px;">"The stars spell it out: Love You Always."</p>
-      <button class="btn-liquid" onclick="goToScreen('screen-memories')">Our Cute Memories 🌸</button>
+      <button class="btn-gold-rim" onclick="goToScreen('screen-memories')">Our Cute Memories 🌸</button>
     </div>
 
+    <!-- SCREEN 7: Crystal Glass Photo Frame -->
     <div class="screen" id="screen-memories">
-      <img class="screen-cat" src="https://media.tenor.com/tV7dC-v_mGkAAAAi/photographer-cat.gif" alt="Camera Cat" />
-      <h1 class="title">Cute Memories 💕</h1>
-      <p class="subtitle">Tap photo to see our moments</p>
+      <h1 class="hero-title">Cute Memories 💕</h1>
+      <p class="hero-subtitle">Tap photo to see our moments</p>
 
-      <div class="crystal-photo-frame floating-element" onclick="nextPhoto()">
+      <div class="crystal-photo-frame" onclick="nextPhoto()">
         <img id="polaroidImage" src="IMG_20260905_205301_817.jpg" alt="Memory">
         <p id="polaroidCaption">Our first sweet adventure together 🌸</p>
       </div>
 
-      <button class="btn-liquid" onclick="nextPhoto()">Next Memory 📸</button>
+      <button class="btn-gold-rim" onclick="nextPhoto()">Next Memory 📸</button>
     </div>
 
+    <!-- SCREEN 8: Reasons Flip Cards -->
     <div class="screen" id="screen-reasons">
-      <img class="screen-cat" src="https://media.tenor.com/2sKip067dSAAAAAi/mochi-peach.gif" alt="Love Cat" />
-      <h1 class="title">Why I Adore You 💖</h1>
-      <p class="subtitle">Tap each card to reveal what I love about you</p>
+      <h1 class="hero-title">Why I Adore You 💖</h1>
+      <p class="hero-subtitle">Tap each card to reveal what I love about you</p>
 
       <div class="reasons-container">
         <div class="flip-card" onclick="flipCard(this)">
@@ -807,61 +880,61 @@
         </div>
       </div>
 
-      <button class="btn-liquid" id="btnReasonsNext" style="display:none;" onclick="goToScreen('screen-touchsync')">Feel My Presence 🤍</button>
+      <button class="btn-gold-rim" id="btnReasonsNext" style="display:none;" onclick="goToScreen('screen-touchsync')">Feel My Presence 🤍</button>
     </div>
 
+    <!-- SCREEN 9: Heartbeat Touch Sync -->
     <div class="screen" id="screen-touchsync">
-      <img class="screen-cat" src="https://media.tenor.com/u_pW-i0B0m4AAAAi/cats-hug.gif" alt="Hug Cat" />
-      <h1 class="title">Heartbeat Sync 💓</h1>
-      <p class="subtitle">Place and hold your thumb on the heart</p>
+      <h1 class="hero-title">Heartbeat Sync 💓</h1>
+      <p class="hero-subtitle">Place and hold your thumb on the heart</p>
 
-      <div class="touch-sync-orb floating-element" id="touchSyncBox">
+      <div class="touch-sync-orb" id="touchSyncBox">
         <div class="heart-icon" style="font-size: 44px;">❤️</div>
         <span style="font-size: 11.5px; color: #ffd166; margin-top: 4px;" id="touchProgress">Hold for 3s...</span>
       </div>
 
       <p id="touchSyncStatus" style="font-size: 12px; color: #ffd166; min-height: 20px;">Feel the rhythm of my love for you...</p>
-      <button class="btn-liquid" id="btnTouchNext" style="display:none;" onclick="goToScreen('screen-wishes')">Pop The Wishes 🎈</button>
+      <button class="btn-gold-rim" id="btnTouchNext" style="display:none;" onclick="goToScreen('screen-wishes')">Pop The Wishes 🎈</button>
     </div>
 
+    <!-- SCREEN 10: Balloons -->
     <div class="screen" id="screen-wishes">
-      <img class="screen-cat" src="https://media.tenor.com/kS9wP_7G2XQAAAAi/cat-kitten.gif" alt="Play Cat" />
-      <h1 class="title">Pop the Wishes 🎈</h1>
-      <p class="subtitle">Tap each balloon to reveal a wish</p>
+      <h1 class="hero-title">Pop the Wishes 🎈</h1>
+      <p class="hero-subtitle">Tap each balloon to reveal a wish</p>
 
       <div class="balloons-flex">
-        <div class="balloon-item floating-element" onclick="popBalloon(0, this)">🎈</div>
-        <div class="balloon-item floating-element" onclick="popBalloon(1, this)">🎈</div>
-        <div class="balloon-item floating-element" onclick="popBalloon(2, this)">🎈</div>
-        <div class="balloon-item floating-element" onclick="popBalloon(3, this)">🎈</div>
-        <div class="balloon-item floating-element" onclick="popBalloon(4, this)">🎈</div>
-        <div class="balloon-item floating-element" onclick="popBalloon(5, this)">🎈</div>
+        <div class="balloon-item" onclick="popBalloon(0, this)">🎈</div>
+        <div class="balloon-item" onclick="popBalloon(1, this)">🎈</div>
+        <div class="balloon-item" onclick="popBalloon(2, this)">🎈</div>
+        <div class="balloon-item" onclick="popBalloon(3, this)">🎈</div>
+        <div class="balloon-item" onclick="popBalloon(4, this)">🎈</div>
+        <div class="balloon-item" onclick="popBalloon(5, this)">🎈</div>
       </div>
 
       <p id="balloonWishText" style="min-height: 44px; color: #ffd166; font-size: 13px; font-weight: 500;">Tap any balloon! ✨</p>
-      <button class="btn-liquid" id="btnBalloonsNext" style="display:none;" onclick="goToScreen('screen-puzzle')">Solve The Surprise 🧩</button>
+      <button class="btn-gold-rim" id="btnBalloonsNext" style="display:none;" onclick="goToScreen('screen-puzzle')">Solve The Surprise 🧩</button>
     </div>
 
+    <!-- SCREEN 11: Real Playable Sliding Puzzle -->
     <div class="screen" id="screen-puzzle">
-      <img class="screen-cat" src="https://media.tenor.com/f0i_kK3o3VMAAAAi/cat-vibing.gif" alt="Smart Cat" />
-      <h1 class="title">Birthday Puzzle 🎂</h1>
-      <p class="subtitle">Tap tiles next to the dark slot to move them!</p>
+      <h1 class="hero-title">Birthday Puzzle 🎂</h1>
+      <p class="hero-subtitle">Tap tiles next to the dark slot to move them!</p>
 
       <div class="puzzle-board" id="puzzleBoard"></div>
 
       <div style="display: flex; gap: 10px;">
-        <button class="btn-liquid" onclick="shufflePlayablePuzzle()">🔀 Shuffle</button>
-        <button class="btn-liquid" onclick="solvePlayablePuzzle()">✨ Solve it for me</button>
+        <button class="btn-gold-rim" style="padding: 10px 22px;" onclick="shufflePlayablePuzzle()">🔀 Shuffle</button>
+        <button class="btn-gold-rim" style="padding: 10px 22px;" onclick="solvePlayablePuzzle()">✨ Solve it</button>
       </div>
-      <button class="btn-liquid" id="btnPuzzleNext" style="display:none; margin-top: 10px;" onclick="goToScreen('screen-scratch')">One Last Surprise ✨</button>
+      <button class="btn-gold-rim" id="btnPuzzleNext" style="display:none; margin-top: 10px;" onclick="goToScreen('screen-scratch')">One Last Surprise ✨</button>
     </div>
 
+    <!-- SCREEN 12: Scratch Card -->
     <div class="screen" id="screen-scratch">
-      <img class="screen-cat" src="https://media.tenor.com/uU6eR5y5Zl4AAAAi/cute-kitty.gif" alt="Scratching Cat" />
-      <h1 class="title">One Last Surprise ✨</h1>
-      <p class="subtitle">Scratch the card to reveal it 🪙</p>
+      <h1 class="hero-title">One Last Surprise ✨</h1>
+      <p class="hero-subtitle">Scratch the card to reveal it 🪙</p>
 
-      <div class="scratch-wrapper floating-element">
+      <div class="scratch-wrapper">
         <div class="scratch-secret">
           <h2 style="font-size: 20px; color: #fff;">🎉 Happy Birthday! 🎉</h2>
           <p style="font-size: 12px; color: #ffd166; margin-top: 4px;">You found the hidden treasure! You mean everything to me ❤️</p>
@@ -869,16 +942,16 @@
         <canvas id="scratchCanvas" width="290" height="160"></canvas>
       </div>
 
-      <button class="btn-liquid" id="btnScratchNext" style="display:none;" onclick="goToScreen('screen-coupons')">My Promises To You 🎟️</button>
+      <button class="btn-gold-rim" id="btnScratchNext" style="display:none;" onclick="goToScreen('screen-coupons')">My Promises To You 🎟️</button>
     </div>
 
+    <!-- SCREEN 13: Coupons -->
     <div class="screen" id="screen-coupons">
-      <img class="screen-cat" src="https://media.tenor.com/0v3qP82J8bEAAAAi/cat-party.gif" alt="Treats Cat" />
-      <h1 class="title">Love Coupons 🎟️</h1>
-      <p class="subtitle">Valid Forever • Redeem anytime no questions asked!</p>
+      <h1 class="hero-title">Love Coupons 🎟️</h1>
+      <p class="hero-subtitle">Valid Forever • Redeem anytime no questions asked!</p>
 
       <div class="coupons-list">
-        <div class="coupon-card floating-element">
+        <div class="coupon-card">
           <div class="coupon-info">
             <h4>🍨 Late Night Ice-Cream Date</h4>
             <p>Craving something sweet? Redeem this!</p>
@@ -886,7 +959,7 @@
           <button class="btn-claim" onclick="claimCoupon(this)">Claim</button>
         </div>
 
-        <div class="coupon-card floating-element">
+        <div class="coupon-card">
           <div class="coupon-info">
             <h4>🏆 "You Win Any Argument"</h4>
             <p>Show this and you automatically win.</p>
@@ -894,7 +967,7 @@
           <button class="btn-claim" onclick="claimCoupon(this)">Claim</button>
         </div>
 
-        <div class="coupon-card floating-element">
+        <div class="coupon-card">
           <div class="coupon-info">
             <h4>🫂 Unlimited Warm Hugs</h4>
             <p>For any day you feel even a little low.</p>
@@ -903,16 +976,16 @@
         </div>
       </div>
 
-      <button class="btn-liquid" onclick="goToScreen('screen-diary')">Open My Diary 📖</button>
+      <button class="btn-gold-rim" onclick="goToScreen('screen-diary')">Open My Diary 📖</button>
     </div>
 
+    <!-- SCREEN 14: Lined Secret Notebook with Harsh's Letter -->
     <div class="screen" id="screen-diary">
-      <img class="screen-cat" src="https://media.tenor.com/hZ8u9_R_3E4AAAAi/writing-cat.gif" alt="Writing Cat" />
-      <h1 class="title">A Letter Just For You</h1>
-      <p class="subtitle">Written straight from my heart</p>
+      <h1 class="hero-title">A Letter Just For You</h1>
+      <p class="hero-subtitle">Written straight from my heart</p>
 
       <div class="diary-scene">
-        <div class="diary-book floating-element" id="diaryCover" onclick="openSecretDiary()">
+        <div class="diary-book" id="diaryCover" onclick="openSecretDiary()">
           <div class="diary-ribbon"></div>
           <div style="font-size: 40px; margin-bottom: 6px;">📖</div>
           <h3 style="font-family: 'Dancing Script', cursive; font-size: 26px; color: #ffd700;">Harsh's Journal</h3>
@@ -922,13 +995,13 @@
         <div class="diary-open-view" id="diaryPages"></div>
       </div>
 
-      <button class="btn-liquid" id="btnReplay" style="display:none;" onclick="location.reload()">Replay 🔄</button>
+      <button class="btn-gold-rim" id="btnReplay" style="display:none;" onclick="location.reload()">Replay 🔄</button>
     </div>
 
   </div>
 
   <script>
-    // Audio Autoplay Engine
+    // Audio Player
     const bgSong = document.getElementById("bgSong");
     let hasPlayed = false;
 
@@ -942,6 +1015,12 @@
     window.addEventListener("click", forcePlayMusic, { passive: true });
     window.addEventListener("touchstart", forcePlayMusic, { passive: true });
 
+    function toggleMusic() {
+      if (!bgSong) return;
+      if (bgSong.paused) bgSong.play();
+      else bgSong.pause();
+    }
+
     function tickClock() {
       const now = new Date();
       const h = String(now.getHours()).padStart(2, '0');
@@ -952,24 +1031,22 @@
     setInterval(tickClock, 1000);
     tickClock();
 
-    // Cosmic Moving Canvas Stars
+    // Dark Blue/Violet Cosmic Bokeh Canvas (Screenshot 1 & 2 Match)
     const bgCvs = document.getElementById("ambientSkyCanvas");
     const bgCtx = bgCvs.getContext("2d");
     let bgStars = [];
-    const romanticColors = ["#ff3377", "#ff85a2", "#fecfef", "#ff1493", "#ffd700", "#b388ff"];
 
     function resizeSky() {
       bgCvs.width = window.innerWidth;
       bgCvs.height = window.innerHeight;
       bgStars = [];
-      for (let i = 0; i < 80; i++) {
+      for (let i = 0; i < 45; i++) {
         bgStars.push({
           x: Math.random() * bgCvs.width,
           y: Math.random() * bgCvs.height,
-          radius: Math.random() * 1.8,
-          speed: Math.random() * 0.4 + 0.15,
-          color: romanticColors[Math.floor(Math.random() * romanticColors.length)],
-          alpha: Math.random() * 0.85 + 0.15
+          radius: Math.random() * 18 + 6,
+          speed: Math.random() * 0.3 + 0.1,
+          alpha: Math.random() * 0.35 + 0.1
         });
       }
     }
@@ -980,16 +1057,18 @@
       bgCtx.clearRect(0, 0, bgCvs.width, bgCvs.height);
       bgStars.forEach(s => {
         s.y -= s.speed;
-        if (s.y < 0) {
-          s.y = bgCvs.height;
+        if (s.y < -30) {
+          s.y = bgCvs.height + 30;
           s.x = Math.random() * bgCvs.width;
         }
-        bgCtx.fillStyle = s.color;
+        bgCtx.fillStyle = "rgba(110, 120, 240, 0.4)";
         bgCtx.globalAlpha = s.alpha;
+        bgCtx.filter = "blur(10px)";
         bgCtx.beginPath();
         bgCtx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
         bgCtx.fill();
       });
+      bgCtx.filter = "none";
       requestAnimationFrame(renderSky);
     }
     renderSky();
@@ -1007,9 +1086,9 @@
 
     function openGiftBox() {
       forcePlayMusic();
-      document.querySelector(".gift-stage").classList.add("opened");
-      confetti({ particleCount: 75, spread: 80, origin: { y: 0.6 } });
-      setTimeout(() => goToScreen("screen-lock"), 600);
+      document.querySelector(".gift-container").classList.add("opened");
+      confetti({ particleCount: 80, spread: 85, origin: { y: 0.6 } });
+      setTimeout(() => goToScreen("screen-lock"), 650);
     }
 
     const PIN = "2709";
@@ -1049,7 +1128,12 @@
       c.classList.add("opened");
       setTimeout(() => {
         c.style.display = "none";
-        goToScreen("screen-loader");
+        // Directly transition into the exact screenshot 2 loading screen
+        goToScreen("screen-loader-dots");
+        setTimeout(() => {
+          // Then directly into the bear reveal screen (screenshot 3)
+          goToScreen("screen-bear-reveal");
+        }, 2200);
       }, 1000);
     }
 
@@ -1085,7 +1169,7 @@
       document.getElementById("btnCakeNext").style.display = "inline-flex";
     }
 
-    // Moon & "LOVE YOU ALWAYS" Connecting Stars Constellation
+    // Moon & Love You Always Constellation
     let starMapTimer;
     function startStarDrift() {
       const cvs = document.getElementById("interactiveStarMap");
@@ -1105,7 +1189,6 @@
       function loopMap() {
         ctx.clearRect(0, 0, cvs.width, cvs.height);
 
-        // Twinkling background stars
         starField.forEach(st => {
           st.alpha += st.twinkle;
           if (st.alpha > 1 || st.alpha < 0.2) st.twinkle = -st.twinkle;
@@ -1124,7 +1207,7 @@
         ctx.fill();
         ctx.shadowBlur = 0;
 
-        // Big Romantic Heart Constellation in sky
+        // Heart Constellation
         ctx.strokeStyle = "rgba(255, 105, 180, 0.65)";
         ctx.lineWidth = 1.2;
         const heartPoints = [
@@ -1134,12 +1217,9 @@
         ];
         ctx.beginPath();
         ctx.moveTo(heartPoints[0].x, heartPoints[0].y);
-        heartPoints.forEach(p => {
-          ctx.lineTo(p.x, p.y);
-        });
+        heartPoints.forEach(p => ctx.lineTo(p.x, p.y));
         ctx.stroke();
 
-        // Stars on vertices
         heartPoints.forEach(p => {
           ctx.fillStyle = "#ffd700";
           ctx.beginPath();
@@ -1147,7 +1227,6 @@
           ctx.fill();
         });
 
-        // "LOVE YOU ALWAYS" written in constellation stars
         ctx.font = "bold 13px 'Poppins', sans-serif";
         ctx.fillStyle = "#ffd1dc";
         ctx.textAlign = "center";
@@ -1162,7 +1241,6 @@
       loopMap();
     }
 
-    // Photo Carousel
     const photos = [
       { url: "IMG_20260905_205301_817.jpg", caption: "Our first sweet adventure together 🌸" },
       { url: "IMG_20260905_223215_019.jpg", caption: "Making every moment magical ✨" },
@@ -1246,13 +1324,10 @@
       }
     }
 
-    // REAL PLAYABLE SLIDING PUZZLE (Moves and Swaps correctly)
     const puzzleBoard = document.getElementById("puzzleBoard");
-    let puzzleState = [0, 1, 2, 3, 4, 5, 6, 7, 8]; // 8 is blank
+    let puzzleState = [0, 1, 2, 3, 4, 5, 6, 7, 8];
 
-    function initPlayablePuzzle() {
-      renderPuzzleTiles();
-    }
+    function initPlayablePuzzle() { renderPuzzleTiles(); }
 
     function renderPuzzleTiles() {
       puzzleBoard.innerHTML = "";
@@ -1273,23 +1348,18 @@
 
     function tryMoveTile(index) {
       const blankIndex = puzzleState.indexOf(8);
-      const validMoves = [
-        blankIndex - 1, blankIndex + 1,
-        blankIndex - 3, blankIndex + 3
-      ];
-
-      // Boundary check for horizontal wraps
+      const validMoves = [blankIndex - 1, blankIndex + 1, blankIndex - 3, blankIndex + 3];
       const isHorizontalWrap = (Math.floor(index / 3) !== Math.floor(blankIndex / 3)) && (Math.abs(index - blankIndex) === 1);
 
       if (validMoves.includes(index) && !isHorizontalWrap) {
         [puzzleState[index], puzzleState[blankIndex]] = [puzzleState[blankIndex], puzzleState[index]];
         renderPuzzleTiles();
-        checkPuzzleSolved();
+        if (puzzleState.every((val, i) => val === i)) solvePlayablePuzzle();
       }
     }
 
     function shufflePlayablePuzzle() {
-      puzzleState = [1, 0, 2, 4, 8, 3, 6, 7, 5]; // Solvable shuffle state
+      puzzleState = [1, 0, 2, 4, 8, 3, 6, 7, 5];
       renderPuzzleTiles();
     }
 
@@ -1303,14 +1373,6 @@
       document.getElementById("btnPuzzleNext").style.display = "inline-flex";
     }
 
-    function checkPuzzleSolved() {
-      const isSolved = puzzleState.every((val, i) => val === i);
-      if (isSolved) {
-        solvePlayablePuzzle();
-      }
-    }
-
-    // Scratch Card
     const scCvs = document.getElementById("scratchCanvas");
     const sCtx = scCvs.getContext("2d");
     sCtx.fillStyle = "#a88d9b";
